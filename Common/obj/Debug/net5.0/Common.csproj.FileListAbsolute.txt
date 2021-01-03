@@ -1,0 +1,12 @@
+C:\Users\Programmer\Desktop\ASP Projects\LMS\Common\bin\Debug\net5.0\Common.deps.json
+C:\Users\Programmer\Desktop\ASP Projects\LMS\Common\bin\Debug\net5.0\Common.dll
+C:\Users\Programmer\Desktop\ASP Projects\LMS\Common\bin\Debug\net5.0\ref\Common.dll
+C:\Users\Programmer\Desktop\ASP Projects\LMS\Common\bin\Debug\net5.0\Common.pdb
+C:\Users\Programmer\Desktop\ASP Projects\LMS\Common\obj\Debug\net5.0\Common.csprojAssemblyReference.cache
+C:\Users\Programmer\Desktop\ASP Projects\LMS\Common\obj\Debug\net5.0\Common.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Programmer\Desktop\ASP Projects\LMS\Common\obj\Debug\net5.0\Common.AssemblyInfoInputs.cache
+C:\Users\Programmer\Desktop\ASP Projects\LMS\Common\obj\Debug\net5.0\Common.AssemblyInfo.cs
+C:\Users\Programmer\Desktop\ASP Projects\LMS\Common\obj\Debug\net5.0\Common.csproj.CoreCompileInputs.cache
+C:\Users\Programmer\Desktop\ASP Projects\LMS\Common\obj\Debug\net5.0\Common.dll
+C:\Users\Programmer\Desktop\ASP Projects\LMS\Common\obj\Debug\net5.0\ref\Common.dll
+C:\Users\Programmer\Desktop\ASP Projects\LMS\Common\obj\Debug\net5.0\Common.pdb

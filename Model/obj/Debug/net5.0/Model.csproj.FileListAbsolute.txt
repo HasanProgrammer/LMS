@@ -1,0 +1,15 @@
+C:\Users\Programmer\Desktop\ASP Projects\LMS\Model\bin\Debug\net5.0\Model.deps.json
+C:\Users\Programmer\Desktop\ASP Projects\LMS\Model\bin\Debug\net5.0\Model.dll
+C:\Users\Programmer\Desktop\ASP Projects\LMS\Model\bin\Debug\net5.0\ref\Model.dll
+C:\Users\Programmer\Desktop\ASP Projects\LMS\Model\bin\Debug\net5.0\Model.pdb
+C:\Users\Programmer\Desktop\ASP Projects\LMS\Model\bin\Debug\net5.0\Common.dll
+C:\Users\Programmer\Desktop\ASP Projects\LMS\Model\bin\Debug\net5.0\Common.pdb
+C:\Users\Programmer\Desktop\ASP Projects\LMS\Model\obj\Debug\net5.0\Model.csprojAssemblyReference.cache
+C:\Users\Programmer\Desktop\ASP Projects\LMS\Model\obj\Debug\net5.0\Model.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Programmer\Desktop\ASP Projects\LMS\Model\obj\Debug\net5.0\Model.AssemblyInfoInputs.cache
+C:\Users\Programmer\Desktop\ASP Projects\LMS\Model\obj\Debug\net5.0\Model.AssemblyInfo.cs
+C:\Users\Programmer\Desktop\ASP Projects\LMS\Model\obj\Debug\net5.0\Model.csproj.CoreCompileInputs.cache
+C:\Users\Programmer\Desktop\ASP Projects\LMS\Model\obj\Debug\net5.0\Model.csproj.CopyComplete
+C:\Users\Programmer\Desktop\ASP Projects\LMS\Model\obj\Debug\net5.0\Model.dll
+C:\Users\Programmer\Desktop\ASP Projects\LMS\Model\obj\Debug\net5.0\ref\Model.dll
+C:\Users\Programmer\Desktop\ASP Projects\LMS\Model\obj\Debug\net5.0\Model.pdb
