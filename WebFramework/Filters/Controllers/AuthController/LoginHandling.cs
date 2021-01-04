@@ -11,7 +11,7 @@ using Model;
 using WebFramework.Extensions;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
-namespace WebFramework.Filters
+namespace WebFramework.Filters.Controllers.AuthController
 {
     public class LoginHandling : ActionFilterAttribute
     {

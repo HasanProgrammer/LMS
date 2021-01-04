@@ -16,6 +16,7 @@ using Microsoft.Extensions.Options;
 using Model;
 using WebFramework.Extensions;
 using WebFramework.Filters;
+using WebFramework.Filters.Controllers.AuthController;
 
 namespace LMS.Controllers.V1
 {

@@ -49,7 +49,7 @@ namespace DataAccess.ViewModels
                                      .Metadata
                                      .GetMetadata<EndpointNameMetadata>()
                                      .EndpointName
-                                     .Equals("")
+                                     .Equals("Admin.User.Create")
                 )
                 {
                     if(validationContext.GetRequiredService<UserManager<User>>().Users.SingleOrDefault(User => User.UserName.Equals(value)) != null)
@@ -72,7 +72,7 @@ namespace DataAccess.ViewModels
                                      .Metadata
                                      .GetMetadata<EndpointNameMetadata>()
                                      .EndpointName
-                                     .Equals("")
+                                     .Equals("Admin.User.Create")
                 )
                 {
                     if(validationContext.GetRequiredService<UserManager<User>>().Users.SingleOrDefault(User => User.Email.Equals(value)) != null)

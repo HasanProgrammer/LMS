@@ -12,23 +12,33 @@ namespace Model
     /*Property | Fields*/
     public partial class User : IdentityUser<string>, IEntity
     {
-        public int? ImageId           { get; set; }
-        public string Phone           { get; set; }
-        public string EmailCode       { get; set; }
-        public int PhoneCode          { get; set; }
-        public bool IsVerifyEmail     { get; set; } = false;
-        public bool IsVerifyPhone     { get; set; } = false;
-        public Status Status          { get; set; }
+        public int? ImageId            { get; set; }
+        public string Phone            { get; set; }
+        public string EmailCode        { get; set; }
+        public int? PhoneCode          { get; set; }
+        public bool IsVerifyEmail      { get; set; } = false;
+        public bool IsVerifyPhone      { get; set; } = false;
+        public Status Status           { get; set; }
         public long CreatedAtTimeStamp { get; set; }
-        public string CreatedAt       { get; set; }
-        public string UpdatedAt       { get; set; }
+        public string CreatedAt        { get; set; }
+        public string UpdatedAt        { get; set; }
     }
     
     /*Navigation Property | Relations*/
     public partial class User
     {
-        public virtual Image Image                     { get; set; }
+        public virtual Image Image { get; set; }
+        
+        /*-----------------------------------------------------------*/
+        
+        public virtual ICollection<Buy> Buys           { get; set; }
+        public virtual ICollection<Term> Terms         { get; set; }
+        public virtual ICollection<Video> Videos       { get; set; }
+        public virtual ICollection<Chapter> Chapters   { get; set; }
+        public virtual ICollection<Answer> Answers     { get; set; }
+        public virtual ICollection<Comment> Comments   { get; set; }
         public virtual ICollection<UserRole> UserRoles { get; set; }
+        public virtual ICollection<Ticket> Tickets     { get; set; }
     }
     
     /*Relation | Configs*/
@@ -54,8 +64,23 @@ namespace Model
                 
             /*---------------------------------------------------*/
             
-            builder.HasOne(User => User.Image)     .WithOne(Image => Image.User).HasForeignKey<User>(User => User.ImageId);
-            builder.HasMany(User => User.UserRoles).WithOne(UR => UR.User)      .OnDelete(DeleteBehavior.Cascade);
+            builder.HasOne(User => User.Image).WithOne(Image => Image.User).HasForeignKey<User>(User => User.ImageId).OnDelete(DeleteBehavior.Restrict);
+            
+            builder.HasMany(User => User.UserRoles).WithOne(UR => UR.User).OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(User => User.Chapters).WithOne(Chapter => Chapter.User).OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(User => User.Terms).WithOne(Term => Term.User).OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(User => User.Videos).WithOne(Video => Video.User).OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(User => User.Comments).WithOne(Comment => Comment.User).OnDelete(DeleteBehavior.Cascade);
+            
+            builder.HasMany(User => User.Answers).WithOne(Answer => Answer.User).OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(User => User.Tickets).WithOne(Ticket => Ticket.User).OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(User => User.Buys).WithOne(Buy => Buy.User).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

@@ -11,7 +11,7 @@ using Microsoft.Extensions.Options;
 using Model;
 using WebFramework.Extensions;
 
-namespace WebFramework.Filters
+namespace WebFramework.Filters.Controllers.AuthController
 {
     public class RegisterHandling : ActionFilterAttribute
     {

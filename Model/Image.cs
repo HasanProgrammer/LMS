@@ -13,6 +13,7 @@ namespace Model
     public partial class Image
     {
         public virtual User User { get; set; }
+        public virtual Term Term { get; set; }
     }
     
     public partial class Image : IEntityTypeConfiguration<Image>
@@ -36,6 +37,8 @@ namespace Model
             /*---------------------------------------------------*/
 
             builder.HasOne(Image => Image.User).WithOne(User => User.Image);
+
+            builder.HasOne(Image => Image.Term).WithOne(Term => Term.Image);
         }
     }
 }

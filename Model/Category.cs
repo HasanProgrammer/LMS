@@ -12,7 +12,7 @@ namespace Model
 
     public partial class Category
     {
-        
+        public virtual ICollection<Term> Terms { get; set; }
     }
 
     public partial class Category : IEntityTypeConfiguration<Category>
@@ -31,6 +31,10 @@ namespace Model
             builder.Property(Category => Category.Name)     .IsRequired();
             builder.Property(Category => Category.CreatedAt).IsRequired();
             builder.Property(Category => Category.UpdatedAt).IsRequired();
+            
+            /*---------------------------------------------------*/
+
+            builder.HasMany(Category => Category.Terms).WithOne(Term => Term.Category).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

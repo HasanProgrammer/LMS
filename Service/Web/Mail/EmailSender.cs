@@ -24,14 +24,14 @@ namespace Service.Web.Mail
             try
             {
                 var message = new MimeMessage();
-                message.From.Add(new MailboxAddress("HasanProgrammer", _Config.FromAddress));
-                to.ForEach(UserMail => message.To.Add(new MailboxAddress("Client", UserMail)));
+                message.From.Add(new MailboxAddress(_Config.FromAddress, _Config.FromAddress));
+                to.ForEach(UserMail => message.To.Add(new MailboxAddress(UserMail, UserMail)));
                 message.Subject = subject;
                 var builder     = new BodyBuilder { TextBody = data };
                 message.Body    = builder.ToMessageBody();
 
                 var client = new SmtpClient();
-                await client.ConnectAsync(_Config.Server, _Config.Port, false); 
+                await client.ConnectAsync(_Config.Server, _Config.Port, false);
                 await client.AuthenticateAsync(_Config.UsernameMail, _Config.PasswordMail);
                 await client.SendAsync(message);
                 await client.DisconnectAsync(true);
@@ -47,8 +47,8 @@ namespace Service.Web.Mail
             try
             {
                 var message = new MimeMessage();
-                message.From.Add(new MailboxAddress("HasanProgrammer", _Config.FromAddress));
-                to.ForEach(UserMail => message.To.Add(new MailboxAddress("Client", UserMail)));
+                message.From.Add(new MailboxAddress(_Config.FromAddress, _Config.FromAddress));
+                to.ForEach(UserMail => message.To.Add(new MailboxAddress(UserMail, UserMail)));
                 message.Subject  = subject;
                 var builder      = new BodyBuilder { HtmlBody = await File.OpenText(file).ReadToEndAsync() };
                 message.Body     = builder.ToMessageBody();

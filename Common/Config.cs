@@ -2,12 +2,13 @@
 
 namespace Common
 {
-    public partial class Config /*Password*/
+    public partial class Config /*Mail*/
     {
         public class Mail
         {
             public string Server       { get; set; }
             public int Port            { get; set; }
+            public string FromName     { get; set; }
             public string FromAddress  { get; set; }
             public string UsernameMail { get; set; }
             public string PasswordMail { get; set; }
@@ -31,8 +32,10 @@ namespace Common
     {
         public class File
         {
-            public int MaxSizeImage  { get; set; }
-            public string UploadPath { get; set; }
+            public int MaxSizeImage       { get; set; }
+            public int MaxSizeVideo       { get; set; }
+            public string UploadPath      { get; set; }
+            public string UploadPathVideo { get; set; }
         }
     }
     
@@ -144,24 +147,6 @@ namespace Common
         {
             //Base's Route
             public const string BaseRoute = "api/v{version:apiVersion}/";
-            
-            //Admin's Panel | Categories
-            public const string ShowAllCategoriesAdminPanel = "";
-            public const string CreateCategoryAdminPanel    = "";
-            public const string EditCategoryAdminPanel      = "";
-            public const string DeleteCategoryAdminPanel    = "";
-            
-            //Admin's Panel | Roles
-            public const string ShowAllRolesAdminPanel = "";
-            public const string CreateRoleAdminPanel   = "";
-            public const string EditRoleAdminPanel     = "";
-            public const string DeleteRoleAdminPanel   = "";
-            
-            //Admin's Panel | Users
-            public const string ShowAllUsersAdminPanel    = "";
-            public const string CreateUserAdminPanel      = "";
-            public const string EditUserAdminPanel        = "";
-            public const string DeleteUserAdminPanel      = "";
         }
     }
 }

@@ -30,5 +30,20 @@ namespace WebFramework.Extensions
         {
             return await UserManager.Users.FirstOrDefaultAsync(User => User.UserName.Equals( context.User.Identity.Name ));
         }
+        
+        public static User GetCurrentUser(this UserManager<User> UserManager, HttpContext context)
+        {
+            return UserManager.Users.FirstOrDefault(User => User.UserName.Equals( context.User.Identity.Name ));
+        }
+        
+        public static async Task<bool> HasRoleAsync(this UserManager<User> UserManager, HttpContext context, string role)
+        {
+            return await UserManager.IsInRoleAsync(await UserManager.GetCurrentUserAsync(context), role);
+        }
+        
+        public static bool HasRole(this UserManager<User> UserManager, HttpContext context, string role)
+        {
+            return UserManager.IsInRoleAsync(UserManager.GetCurrentUser(context), role).Result;
+        }
     }
 }

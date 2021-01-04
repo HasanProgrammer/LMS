@@ -13,7 +13,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Model;
 using Service.Entity.CategoryServices.V1;
+using Service.Entity.ChapterServices.V1;
 using Service.Entity.RoleServices.V1;
+using Service.Entity.TermServices.V1;
 using Service.Entity.UserServices.V2;
 using Service.Web.Mail;
 using WebFramework.Exceptions;
@@ -42,6 +44,14 @@ namespace WebFramework.Extensions
             service.AddScoped<IUserService<UsersViewModel, User>, UserService>();
             //User's Services
             
+            //Term's Services
+            service.AddScoped<ITermService<TermsViewModel, Term>, TermService>();
+            //Term's Services
+            
+            //Chapter's Services
+            service.AddScoped<IChapterService<ChaptersViewModel, Chapter>, ChapterService>();
+            //Chapter's Services
+            
             //Other's Service
             service.AddScoped<IMailSender, EmailSender>();
             //Other's Service
@@ -53,8 +63,36 @@ namespace WebFramework.Extensions
         {
             //Global's Filter
             service.AddScoped<ModelValidation>();
-            service.AddScoped<LoginHandling>();
-            service.AddScoped<RegisterHandling>();
+            
+            /*-------------------------------------------------------Admin's Filter-------------------------------------------------------*/
+
+            //Category's Controller
+            service.AddScoped<Filters.Areas.Admin.CategoryController.CheckCategory>();
+            service.AddScoped<Filters.Areas.Admin.CategoryController.CheckUniqueName>();
+            //Category's Controller
+            
+            //User's Controller
+            service.AddScoped<Filters.Areas.Admin.UserController.CheckPassword>();
+            service.AddScoped<Filters.Areas.Admin.UserController.CheckUniqueEmail>();
+            service.AddScoped<Filters.Areas.Admin.UserController.CheckUniqueUserName>();
+            service.AddScoped<Filters.Areas.Admin.UserController.CheckUser>();
+            service.AddScoped<Filters.Areas.Admin.UserController.ImageUploader>();
+            service.AddScoped<Filters.Areas.Admin.UserController.RegisterHandling>();
+            //User's Controller
+            
+            /*-------------------------------------------------------Admin's Filter-------------------------------------------------------*/
+            
+            //Auth's Controller
+            service.AddScoped<Filters.Controllers.AuthController.LoginHandling>();
+            service.AddScoped<Filters.Controllers.AuthController.RegisterHandling>();
+            //Auth's Controller
+            
+            //Term's Controller
+            service.AddScoped<Filters.Controllers.TermController.CheckTerm>();
+            service.AddScoped<Filters.Controllers.TermController.CheckUniqueName>();
+            service.AddScoped<Filters.Controllers.TermController.ImageUploader>();
+            service.AddScoped<Filters.Controllers.TermController.TermPolicy>();
+            //Term's Controller
             
             return service;
         }
