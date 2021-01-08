@@ -29,7 +29,7 @@ namespace DataAccess.ViewModels
                                      .Metadata
                                      .GetMetadata<EndpointNameMetadata>()
                                      .EndpointName
-                                     .Equals("")
+                                     .Equals("Admin.Category.Create")
                 )
                 {
                     if(validationContext.GetRequiredService<DatabaseContext>().Categories.SingleOrDefault(RC => RC.Name.Equals(value)) != null)

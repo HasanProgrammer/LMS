@@ -34,7 +34,7 @@ namespace Model
             
             /*---------------------------------------------------*/
 
-            builder.HasMany(Category => Category.Terms).WithOne(Term => Term.Category).OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany(Category => Category.Terms).WithOne(Term => Term.Category).HasForeignKey(Term => Term.CategoryId).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

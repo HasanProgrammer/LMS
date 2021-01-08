@@ -26,7 +26,7 @@ namespace LMS.Areas.Admin.Controllers.V2
             UserManager<User>                  UserManager,
             RoleManager<Role>                  RoleManager,
             DatabaseContext                    Context,
-            IUserService<UsersViewModel, User> UserService,
+            UserService<UsersViewModel, User>  UserService,
             IOptions<Config.StatusCode>        StatusCode,
             IOptions<Config.Messages>          StatusMessage
         )
@@ -100,8 +100,8 @@ namespace LMS.Areas.Admin.Controllers.V2
         public virtual async Task<JsonResult> Edit(string id, [FromForm] EditUserViewModel model, IFormFile image)
         {
             //I
-            User user          = Request.HttpContext.GetRouteData().Values["User"] as User;
-            List<string> roles = Request.HttpContext.GetRouteData().Values["Roles"] as List<string>;
+            User user          = Request.HttpContext.GetRouteData().Values["User"]      as User;
+            List<string> roles = Request.HttpContext.GetRouteData().Values["Roles"]     as List<string>;
             string ImagePath   = Request.HttpContext.GetRouteData().Values["ImagePath"] as string;
             string ImageType   = Request.HttpContext.GetRouteData().Values["ImageType"] as string;
             
@@ -133,8 +133,10 @@ namespace LMS.Areas.Admin.Controllers.V2
             
             //III
             if(newImage != null) user.ImageId = newImage.Id;
-            user.UserName = model.Username;
-            user.Email    = model.Email;
+            user.UserName  = model.Username;
+            user.Phone     = model.Phone;
+            user.Email     = model.Email;
+            user.UpdatedAt = PersianDatetime.Now();
             
             //IV
             if(model.Password != null) await _UserManager.ResetPasswordAsync(user, await _UserManager.GeneratePasswordResetTokenAsync(user), model.Password);

@@ -30,7 +30,7 @@ namespace WebFramework.Jobs
                                                                        .ToList()
             );
 
-            context.SaveChangesAsync();
+            context.SaveChanges();
         }
     }
 }

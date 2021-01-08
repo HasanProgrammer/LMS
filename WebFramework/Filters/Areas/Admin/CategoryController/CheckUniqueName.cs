@@ -12,8 +12,8 @@ namespace WebFramework.Filters.Areas.Admin.CategoryController
 {
     public class CheckUniqueName : ActionFilterAttribute
     {
-        //Services
-        private readonly ICategoryService<CategoriesViewModel, Category> _CategoryService;
+        //DataService
+        private readonly CategoryService<CategoriesViewModel, Category> _CategoryService;
         
         //Configs
         private readonly Config.StatusCode _StatusCode;
@@ -21,12 +21,12 @@ namespace WebFramework.Filters.Areas.Admin.CategoryController
         
         public CheckUniqueName
         (
-            ICategoryService<CategoriesViewModel, Category> CategoryService, 
+            CategoryService<CategoriesViewModel, Category> CategoryService, 
             IOptions<Config.StatusCode> StatusCode, 
             IOptions<Config.Messages>   StatusMessage
         )
         {
-            //Services
+            //DataService
             _CategoryService = CategoryService;
             
             //Configs

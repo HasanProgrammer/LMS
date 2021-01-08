@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
@@ -50,7 +51,7 @@ namespace DataAccess.ViewModels
                                      .Metadata
                                      .GetMetadata<EndpointNameMetadata>()
                                      .EndpointName
-                                     .Equals("Admin.Term.Create")
+                                     .Equals("Term.Create")
                 )
                 {
                     if(validationContext.GetRequiredService<DatabaseContext>().Terms.SingleOrDefault(Term => Term.Name.Equals(value)) != null)
@@ -76,13 +77,8 @@ namespace DataAccess.ViewModels
         {
             protected override ValidationResult IsValid(object value, ValidationContext validationContext)
             {
-                if (value != null)
-                {
-                    if((int)value != 0 || (int)value != 1)
-                        return new ValidationResult(ErrorMessage);
-                    return ValidationResult.Success;
-                }
-                
+                if(Convert.ToInt32(value) != 0 && Convert.ToInt32(value) != 1)
+                    return new ValidationResult(ErrorMessage);
                 return ValidationResult.Success;
             }
         }

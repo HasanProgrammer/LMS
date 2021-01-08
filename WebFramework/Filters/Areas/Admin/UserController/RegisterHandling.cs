@@ -57,11 +57,16 @@ namespace WebFramework.Filters.Areas.Admin.UserController
             //III
             User user = new User
             {
-                Id        = Guid.NewGuid().ToString(),
-                UserName  = model.Username,
-                Email     = model.Email,
-                CreatedAt = PersianDatetime.Now(),
-                UpdatedAt = PersianDatetime.Now()
+                Id                 = Guid.NewGuid().ToString(),
+                UserName           = model.Username,
+                Email              = model.Email,
+                Phone              = model.Phone,
+                Status             = Model.Enums.User.Status.Active,
+                IsVerifyEmail      = true, 
+                IsVerifyPhone      = true, 
+                CreatedAt          = PersianDatetime.Now(),
+                CreatedAtTimeStamp = Time.TimeStampNow(),
+                UpdatedAt          = PersianDatetime.Now()
             };
             
             //IV

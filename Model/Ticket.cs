@@ -44,9 +44,9 @@ namespace Model
             
             /*-------------------------------------------------------*/
 
-            builder.HasOne(Ticket => Ticket.User).WithMany(User => User.Tickets).HasForeignKey(Ticket => Ticket.UserId).OnDelete(DeleteBehavior.Restrict);
+            builder.HasOne(Ticket => Ticket.User).WithMany(User => User.Tickets).HasForeignKey(Ticket => Ticket.UserId).OnDelete(DeleteBehavior.Cascade);
             
-            builder.HasOne(Ticket => Ticket.Term).WithMany(Term => Term.Tickets).HasForeignKey(Ticket => Ticket.TermId).OnDelete(DeleteBehavior.Restrict);
+            builder.HasOne(Ticket => Ticket.Term).WithMany(Term => Term.Tickets).HasForeignKey(Ticket => Ticket.TermId).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

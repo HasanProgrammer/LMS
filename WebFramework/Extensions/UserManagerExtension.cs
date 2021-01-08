@@ -36,6 +36,11 @@ namespace WebFramework.Extensions
             return UserManager.Users.FirstOrDefault(User => User.UserName.Equals( context.User.Identity.Name ));
         }
         
+        public static User GetCurrentUserWithPurchasesTerm(this UserManager<User> UserManager, HttpContext context)
+        {
+            return UserManager.Users.Include(User => User.Buys).FirstOrDefault(User => User.UserName.Equals( context.User.Identity.Name ));
+        }
+        
         public static async Task<bool> HasRoleAsync(this UserManager<User> UserManager, HttpContext context, string role)
         {
             return await UserManager.IsInRoleAsync(await UserManager.GetCurrentUserAsync(context), role);

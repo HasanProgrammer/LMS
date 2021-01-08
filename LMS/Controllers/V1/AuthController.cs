@@ -178,7 +178,7 @@ namespace LMS.Controllers.V1
             {
                 Token     = result,
                 UserName  = user.UserName,
-                UserImage = user.Image != null ? $"{_File.UploadPath.Replace("\\", "/")}{user.Image.Path}" : null
+                UserImage = user.Image != null ? $"{_File.UploadPathImagePublic.Replace("\\", "/")}{user.Image.Path}" : null
             }));
         }
     }

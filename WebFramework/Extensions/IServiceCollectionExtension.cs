@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using System.Threading.Tasks;
 using Common;
 using DataAccess;
@@ -12,11 +13,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Model;
-using Service.Entity.CategoryServices.V1;
-using Service.Entity.ChapterServices.V1;
-using Service.Entity.RoleServices.V1;
-using Service.Entity.TermServices.V1;
-using Service.Entity.UserServices.V2;
+using DataService.Entity.CategoryServices.V1;
+using DataService.Entity.ChapterServices.V1;
+using DataService.Entity.RoleServices.V1;
+using DataService.Entity.TermServices.V1;
+using DataService.Entity.UserServices.V2;
+using DataService.Entity.VideoServices.V1;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Service.Web.Mail;
 using WebFramework.Exceptions;
 using WebFramework.Filters;
@@ -33,28 +37,32 @@ namespace WebFramework.Extensions
         
         public static IServiceCollection AddIocContainer(this IServiceCollection service)
         {
-            //Category's Services
-            service.AddScoped<ICategoryService<CategoriesViewModel, Category>, CategoryService>();
+            //Category's DataService
+            service.AddScoped<CategoryService<CategoriesViewModel, Category>, CategoryService>();
             
-            //Role's Services
-            service.AddScoped<IRoleService<RolesViewModel, Role>, RoleService>();
-            //Role's Services
+            //Role's DataService
+            service.AddScoped<RoleService<RolesViewModel, Role>, RoleService>();
+            //Role's DataService
             
-            //User's Services
-            service.AddScoped<IUserService<UsersViewModel, User>, UserService>();
-            //User's Services
+            //User's DataService
+            service.AddScoped<UserService<UsersViewModel, User>, UserService>();
+            //User's DataService
             
-            //Term's Services
-            service.AddScoped<ITermService<TermsViewModel, Term>, TermService>();
-            //Term's Services
+            //Term's DataService
+            service.AddScoped<TermService<TermsViewModel, Term>, TermService>();
+            //Term's DataService
             
-            //Chapter's Services
-            service.AddScoped<IChapterService<ChaptersViewModel, Chapter>, ChapterService>();
-            //Chapter's Services
+            //Chapter's DataService
+            service.AddScoped<ChapterService<ChaptersViewModel, Chapter>, ChapterService>();
+            //Chapter's DataService
             
-            //Other's Service
+            //Video's DataService
+            service.AddScoped<VideoService<VideosViewModel, Video>, VideoService>();
+            //Video's DataService
+            
+            //Other's DataService
             service.AddScoped<IMailSender, EmailSender>();
-            //Other's Service
+            //Other's DataService
             
             return service;
         }
@@ -88,11 +96,37 @@ namespace WebFramework.Extensions
             //Auth's Controller
             
             //Term's Controller
+            service.AddScoped<Filters.Controllers.TermController.CheckCategory>();
             service.AddScoped<Filters.Controllers.TermController.CheckTerm>();
             service.AddScoped<Filters.Controllers.TermController.CheckUniqueName>();
             service.AddScoped<Filters.Controllers.TermController.ImageUploader>();
             service.AddScoped<Filters.Controllers.TermController.TermPolicy>();
             //Term's Controller
+            
+            //Chapter's Controller
+            service.AddScoped<Filters.Controllers.ChapterController.CheckTerm>();
+            service.AddScoped<Filters.Controllers.ChapterController.TermPolicy>();
+            service.AddScoped<Filters.Controllers.ChapterController.ChapterPolicy>();
+            service.AddScoped<Filters.Controllers.ChapterController.CheckChapter>();
+            service.AddScoped<Filters.Controllers.ChapterController.CheckUniqueTitle>();
+            //Chapter's Controller
+            
+            //Video's Controller
+            service.AddScoped<Filters.Controllers.VideoController.ChapterPolicy>();
+            service.AddScoped<Filters.Controllers.VideoController.CheckChapter>();
+            service.AddScoped<Filters.Controllers.VideoController.CheckTerm>();
+            service.AddScoped<Filters.Controllers.VideoController.CheckVideo>();
+            service.AddScoped<Filters.Controllers.VideoController.TermPolicy>();
+            service.AddScoped<Filters.Controllers.VideoController.VideoPolicy>();
+            service.AddScoped<Filters.Controllers.VideoController.VideoUploader>();
+            //Video's Controller
+            
+            //Home's Controller
+            service.AddScoped<Filters.Controllers.HomeController.CheckCategory>();
+            service.AddScoped<Filters.Controllers.HomeController.CheckTerm>();
+            service.AddScoped<Filters.Controllers.HomeController.CheckVideo>();
+            service.AddScoped<Filters.Controllers.HomeController.VideoPolicy>();
+            //Home's Controller
             
             return service;
         }
@@ -191,12 +225,25 @@ namespace WebFramework.Extensions
                 Option.AddPolicy("CORS", Builder =>
                 {
                     Builder.WithOrigins("http://localhost:3000")
+                           .WithOrigins("http://localhost:3001")
                            .AllowAnyHeader()
                            .AllowAnyMethod()
                            .WithExposedHeaders("X-Pagination"); /*این یک Header شخصی است که برای ارسال داده ها به شکل صفحه بندی شده مورد استفاده قرار می گیرد*/
                 });
             });
             
+            return service;
+        }
+
+        public static IServiceCollection AddSessionContainer(this IServiceCollection service, IConfiguration configuration)
+        {
+            service.AddDistributedMemoryCache();
+            service.AddSession(Config =>
+            {
+                Config.IdleTimeout = TimeSpan.FromMinutes(configuration.GetValue<int>("Session:Timer"));
+            });
+            service.AddMvc();
+
             return service;
         }
 
@@ -207,6 +254,8 @@ namespace WebFramework.Extensions
                    .Configure<Config.JWT>       (config: configuration.GetSection("JWT"))
                    .Configure<Config.Password>  (config: configuration.GetSection("Password"))
                    .Configure<Config.File>      (config: configuration.GetSection("File"))
+                   .Configure<Config.ZarinPal>  (config: configuration.GetSection("ZarinPal"))
+                   .Configure<Config.AdminData> (config: configuration.GetSection("AdminData"))
                    .Configure<Config.Mail>      (config: configuration.GetSection("SMTP"));
             
             return service;

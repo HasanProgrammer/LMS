@@ -42,14 +42,22 @@ namespace WebFramework.Filters.Controllers.TermController
 
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            //I
             IFormFile file = context.ActionArguments.Values.SingleOrDefault(Parameter => Parameter is IFormFile) as IFormFile;
-            var UploadPath = Path.Combine(_Environment.WebRootPath, _File.UploadPathVideo);
+            var UploadPath = Path.Combine(_Environment.WebRootPath, _File.UploadPathImagePublic);
             
-            //II
-            if (file != null)
+            if
+            (
+                context.HttpContext.GetEndpoint().Metadata.GetMetadata<EndpointNameMetadata>().EndpointName.Equals("Term.Create")
+            )
             {
-                //III
+                if (file == null || file.Length == 0)
+                {
+                    JsonResponse.Handle(context.HttpContext, _StatusCode.NotFoundImage);
+                    context.Result = new EmptyResult();
+                    context.Result = JsonResponse.Return(_StatusCode.NotFoundImage, _StatusMessage.NotFoundImage, new {});
+                    return;
+                }
+                
                 if (!file.IsImage())
                 {
                     JsonResponse.Handle(context.HttpContext, _StatusCode.IsNotCorrectImageType);
@@ -58,7 +66,6 @@ namespace WebFramework.Filters.Controllers.TermController
                     return;
                 }
                 
-                //IV
                 if (file.Length > _File.MaxSizeImage)
                 {
                     JsonResponse.Handle(context.HttpContext, _StatusCode.MaxSizeImage);
@@ -66,22 +73,49 @@ namespace WebFramework.Filters.Controllers.TermController
                     context.Result = JsonResponse.Return(_StatusCode.MaxSizeImage, _StatusMessage.MaxSizeImage, new {});
                     return;
                 }
-                
-                //V
-                var UploadedPathAlready = (context.HttpContext.GetRouteData().Values["Term"] as Term)?.Image?.Path;
-                var RootPath = _Environment.WebRootPath + "\\" + _File.UploadPath;
-                if(File.Exists(RootPath + UploadedPathAlready))
-                    File.Delete(RootPath + UploadedPathAlready);
 
-                //VI
                 var FileExtension = Path.GetExtension(file.FileName);
                 var NewFileName   = Guid.NewGuid().ToString().Replace("-", "") + FileExtension;
                 var FileStream    = new FileStream(Path.Combine(UploadPath, NewFileName) , FileMode.Create);
                 file.CopyTo(FileStream);
+                FileStream.Close();
                 
-                //VII
                 context.HttpContext.GetRouteData().Values.Add("ImagePath", NewFileName);
                 context.HttpContext.GetRouteData().Values.Add("ImageType", FileExtension);
+            }
+            else
+            {
+                if (file != null)
+                {
+                    if (!file.IsImage())
+                    {
+                        JsonResponse.Handle(context.HttpContext, _StatusCode.IsNotCorrectImageType);
+                        context.Result = new EmptyResult();
+                        context.Result = JsonResponse.Return(_StatusCode.IsNotCorrectImageType, _StatusMessage.IsNotCorrectImageType, new {});
+                        return;
+                    }
+                
+                    if (file.Length > _File.MaxSizeImage)
+                    {
+                        JsonResponse.Handle(context.HttpContext, _StatusCode.MaxSizeImage);
+                        context.Result = new EmptyResult();
+                        context.Result = JsonResponse.Return(_StatusCode.MaxSizeImage, _StatusMessage.MaxSizeImage, new {});
+                        return;
+                    }
+                
+                    var UploadedPathAlready = (context.HttpContext.GetRouteData().Values["Term"] as Term).Image.Path;
+                    if(File.Exists(UploadPath + UploadedPathAlready))
+                        File.Delete(UploadPath + UploadedPathAlready);
+
+                    var FileExtension = Path.GetExtension(file.FileName);
+                    var NewFileName   = Guid.NewGuid().ToString().Replace("-", "") + FileExtension;
+                    var FileStream    = new FileStream(Path.Combine(UploadPath, NewFileName) , FileMode.Create);
+                    file.CopyTo(FileStream);
+                    FileStream.Close();
+                
+                    context.HttpContext.GetRouteData().Values.Add("ImagePath", NewFileName);
+                    context.HttpContext.GetRouteData().Values.Add("ImageType", FileExtension);
+                }
             }
         }
     }

@@ -14,8 +14,8 @@ namespace WebFramework.Filters.Controllers.TermController
 {
     public class CheckUniqueName : ActionFilterAttribute
     {
-        //Services
-        private readonly ITermService<TermsViewModel, Term> _TermService;
+        //DataService
+        private readonly TermService<TermsViewModel, Term> _TermService;
         
         //Configs
         private readonly Config.StatusCode _StatusCode;
@@ -23,12 +23,12 @@ namespace WebFramework.Filters.Controllers.TermController
         
         public CheckUniqueName
         (
-            ITermService<TermsViewModel, Term> TermService, 
+            TermService<TermsViewModel, Term> TermService, 
             IOptions<Config.StatusCode> StatusCode, 
             IOptions<Config.Messages>   StatusMessage
         )
         {
-            //Services
+            //DataService
             _TermService = TermService;
             
             //Configs

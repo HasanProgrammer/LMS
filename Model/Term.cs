@@ -29,11 +29,12 @@ namespace Model
         
         /*-----------------------------------------------------------*/
         
-        public virtual ICollection<Buy> Buys         { get; set; }
-        public virtual ICollection<Video> Videos     { get; set; }
-        public virtual ICollection<Chapter> Chapters { get; set; }
-        public virtual ICollection<Comment> Comments { get; set; }
-        public virtual ICollection<Ticket>  Tickets  { get; set; }
+        public virtual ICollection<Buy> Buys                 { get; set; }
+        public virtual ICollection<Video> Videos             { get; set; }
+        public virtual ICollection<Chapter> Chapters         { get; set; }
+        public virtual ICollection<Comment> Comments         { get; set; }
+        public virtual ICollection<Ticket>  Tickets          { get; set; }
+        public virtual ICollection<Transaction> Transactions { get; set; }
     }
 
     public partial class Term : IEntityTypeConfiguration<Term>
@@ -63,21 +64,23 @@ namespace Model
             
             /*-------------------------------------------------------*/
 
-            builder.HasMany(Term => Term.Chapters).WithOne(Chapter => Chapter.Term).OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany(Term => Term.Chapters).WithOne(Chapter => Chapter.Term).HasForeignKey(Chapter => Chapter.TermId).OnDelete(DeleteBehavior.Cascade);
             
-            builder.HasOne(Term => Term.Category).WithMany(Category => Category.Terms).HasForeignKey(Term => Term.CategoryId).OnDelete(DeleteBehavior.Restrict);
+            builder.HasOne(Term => Term.Category).WithMany(Category => Category.Terms).HasForeignKey(Term => Term.CategoryId).OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasOne(Term => Term.Image).WithOne(Image => Image.Term).HasForeignKey<Term>(Term => Term.ImageId).OnDelete(DeleteBehavior.Restrict);
+            builder.HasOne(Term => Term.Image).WithOne(Image => Image.Term).HasForeignKey<Term>(Term => Term.ImageId);
 
-            builder.HasOne(Term => Term.User).WithMany(User => User.Terms).HasForeignKey(Term => Term.UserId).OnDelete(DeleteBehavior.Restrict);
+            builder.HasOne(Term => Term.User).WithMany(User => User.Terms).HasForeignKey(Term => Term.UserId).OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasMany(Term => Term.Videos).WithOne(Video => Video.Term).OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany(Term => Term.Videos).WithOne(Video => Video.Term).HasForeignKey(Video => Video.TermId).OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasMany(Term => Term.Comments).WithOne(Comment => Comment.Term).OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany(Term => Term.Comments).WithOne(Comment => Comment.Term).HasForeignKey(Comment => Comment.TermId).OnDelete(DeleteBehavior.Cascade);
             
-            builder.HasMany(Term => Term.Tickets).WithOne(Ticket => Ticket.Term).OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany(Term => Term.Tickets).WithOne(Ticket => Ticket.Term).HasForeignKey(Ticket => Ticket.TermId).OnDelete(DeleteBehavior.Cascade);
             
-            builder.HasMany(Term => Term.Buys).WithOne(Buy => Buy.Term).OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany(Term => Term.Buys).WithOne(Buy => Buy.Term).HasForeignKey(Buy => Buy.TermId).OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(Term => Term.Transactions).WithOne(Tran => Tran.Term).HasForeignKey(Tran => Tran.TermId);
         }
     }
 }

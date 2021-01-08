@@ -22,7 +22,7 @@ namespace LMS
 
         public IConfiguration Configuration { get; }
         
-        public void ConfigureServices(IServiceCollection services) /*Service Container*/
+        public void ConfigureServices(IServiceCollection services) /*DataService Container*/
         {
             services.AddControllers();
             
@@ -38,6 +38,7 @@ namespace LMS
             services.AddCorsContainer();
             services.AddTaskSchedulingContainer(Configuration);
             services.AddPureApiVersion();
+            services.AddSessionContainer(Configuration);
             /*Hasan's Code*/
         }
         
@@ -69,7 +70,7 @@ namespace LMS
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            
+
             /*-------------------------------------------------------*/
 
             app.UseHangfireServer();
@@ -91,12 +92,16 @@ namespace LMS
             app.UseAuthorization();
             
             /*-------------------------------------------------------*/
+            
+            app.UseSession();
+            
+            /*-------------------------------------------------------*/
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
-            
+
             /*-------------------------------------------------------*/
             
             jobs.UseBackgroundTasks(provider);

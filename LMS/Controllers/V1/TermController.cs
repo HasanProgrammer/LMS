@@ -29,8 +29,8 @@ namespace LMS.Controllers.V1
         private readonly Config.Messages   _StatusMessage;
         
         public TermController (
-            IServiceProvider             Provider,
-            DatabaseContext              Context,
+            IServiceProvider            Provider,
+            DatabaseContext             Context,
             IOptions<Config.StatusCode> StatusCode,
             IOptions<Config.Messages>   StatusMessage
         )
@@ -42,17 +42,15 @@ namespace LMS.Controllers.V1
         }
 
         [HttpGet]
-        [Route(template: "", Name = "Admin.Term.All.Paginate")]
+        [Route(template: "", Name = "Term.All.Paginate")]
         public async Task<JsonResult> Index([FromQuery] PaginateQueryViewModel model)
         {
-            PaginatedList<TermsViewModel> Terms;
-            UserManager<User> UserManager                  = _Provider.GetRequiredService< UserManager<User> >();
-            ITermService<TermsViewModel, Term> TermService = _Provider.GetRequiredService< ITermService<TermsViewModel , Term> >();
+            UserManager<User> UserManager                 = _Provider.GetRequiredService< UserManager<User> >();
+            TermService<TermsViewModel, Term> TermService = _Provider.GetRequiredService< TermService<TermsViewModel , Term> >();
             
-            if(await UserManager.HasRoleAsync(Request.HttpContext, "Admin"))
-                Terms = await TermService.FindAllWithNoTrackingAndPaginateAsync(model.PageNumber, model.CountSizePerPage);
-            else
-                Terms = await TermService.FindAllForUserWithNoTrackingAndPaginateAsync(await UserManager.GetCurrentUserAsync(Request.HttpContext), model.PageNumber, model.CountSizePerPage);
+            PaginatedList<TermsViewModel> Terms = await UserManager.HasRoleAsync(Request.HttpContext, "Admin") ?
+                                                  await TermService.FindAllWithNoTrackingAndPaginateAsync(model.PageNumber, model.CountSizePerPage) :
+                                                  await TermService.FindAllForUserWithNoTrackingAndPaginateAsync(await UserManager.GetCurrentUserAsync(Request.HttpContext), model.PageNumber, model.CountSizePerPage);
 
             JsonResponse.Handle(Request.HttpContext, "X-Pagination", new
             {
@@ -67,7 +65,8 @@ namespace LMS.Controllers.V1
         }
 
         [HttpPut]
-        [Route(template: "create", Name = "Admin.Term.Create")]
+        [Route(template: "create", Name = "Term.Create")]
+        [ServiceFilter(type: typeof(CheckCategory))]
         [ServiceFilter(type: typeof(ModelValidation))]
         [ServiceFilter(type: typeof(ImageUploader))]
         public async Task<JsonResult> Create([FromForm] CreateTermViewModel model, IFormFile image)
@@ -101,28 +100,34 @@ namespace LMS.Controllers.V1
                 UpdatedAt   = PersianDatetime.Now()
             };
 
+            await _Context.Terms.AddAsync(Term);
+
             if (Convert.ToBoolean(await _Context.SaveChangesAsync()))
                 return JsonResponse.Return(_StatusCode.SuccessCreate, _StatusMessage.SuccessCreate, new { });
             return JsonResponse.Return(_StatusCode.ErrorCreate, _StatusMessage.ErrorCreate, new { });
         }
         
         [HttpPatch]
-        [Route(template: "edit/{term}", Name = "Admin.Term.Edit")]
+        [Route(template: "edit/{id:int}", Name = "Term.Edit")]
         [ServiceFilter(type: typeof(CheckTerm))]
         [ServiceFilter(type: typeof(TermPolicy))]
+        [ServiceFilter(type: typeof(CheckCategory))]
         [ServiceFilter(type: typeof(ModelValidation))]
         [ServiceFilter(type: typeof(CheckUniqueName))]
         [ServiceFilter(type: typeof(ImageUploader))]
-        public async Task<JsonResult> Edit(int term, [FromForm] EditTermViewModel model, IFormFile image)
+        public async Task<JsonResult> Edit(int id, [FromForm] EditTermViewModel model, IFormFile image)
         {
             Term Term = Request.HttpContext.GetRouteData().Values["Term"] as Term;
             
             if (image != null)
             {
-                Term.Image.Path      = Request.HttpContext.GetRouteData().Values["ImageType"] as string;
-                Term.Image.Type      = Request.HttpContext.GetRouteData().Values["ImagePath"] as string;;
-                Term.Image.UpdatedAt = PersianDatetime.Now();
-                await _Context.SaveChangesAsync();
+                Image Image = Term.Image;
+                
+                Image.Path      = Request.HttpContext.GetRouteData().Values["ImagePath"] as string;
+                Image.Type      = Request.HttpContext.GetRouteData().Values["ImageType"] as string;
+                Image.UpdatedAt = PersianDatetime.Now();
+
+                _Context.Images.Update(Image);
             }
 
             Term.CategoryId  = model.Category;
@@ -133,61 +138,63 @@ namespace LMS.Controllers.V1
             Term.Price       = model.Price;
             Term.HasChapter  = Convert.ToBoolean(model.HasChapter);
             Term.UpdatedAt   = PersianDatetime.Now();
-            
+
+            _Context.Terms.Update(Term);
             if(Convert.ToBoolean(await _Context.SaveChangesAsync()))
                 return JsonResponse.Return(_StatusCode.SuccessEdit, _StatusMessage.SuccessEdit, new { });
             return JsonResponse.Return(_StatusCode.ErrorEdit, _StatusMessage.ErrorEdit, new { });
         }
 
         [HttpPatch]
-        [Route(template: "active/{term}", Name = "Admin.Term.Active")]
+        [Route(template: "active/{id:int}", Name = "Term.Active")]
         [ServiceFilter(type: typeof(CheckTerm))]
         [ServiceFilter(type: typeof(TermPolicy))]
-        public async Task<JsonResult> Active(int term)
+        public async Task<JsonResult> Active(int id)
         {
             Term Term = Request.HttpContext.GetRouteData().Values["Term"] as Term;
                 
             Term.Status    = Model.Enums.Term.Status.Active;
             Term.UpdatedAt = PersianDatetime.Now();
-            
+
+            _Context.Terms.Update(Term);
             if(Convert.ToBoolean(await _Context.SaveChangesAsync()))
                 return JsonResponse.Return(_StatusCode.SuccessEdit, _StatusMessage.SuccessEdit, new { });
             return JsonResponse.Return(_StatusCode.ErrorEdit, _StatusMessage.ErrorEdit, new { });
         }
         
         [HttpPatch]
-        [Route(template: "inactive/{term}", Name = "Admin.Term.InActive")]
+        [Route(template: "inactive/{id:int}", Name = "Term.InActive")]
         [ServiceFilter(type: typeof(CheckTerm))]
         [ServiceFilter(type: typeof(TermPolicy))]
-        public async Task<JsonResult> InActive(int term)
+        public async Task<JsonResult> InActive(int id)
         {
             Term Term = Request.HttpContext.GetRouteData().Values["Term"] as Term;
                 
             Term.Status    = Model.Enums.Term.Status.Inactive;
             Term.UpdatedAt = PersianDatetime.Now();
             
+            _Context.Terms.Update(Term);
             if(Convert.ToBoolean(await _Context.SaveChangesAsync()))
                 return JsonResponse.Return(_StatusCode.SuccessEdit, _StatusMessage.SuccessEdit, new { });
             return JsonResponse.Return(_StatusCode.ErrorEdit, _StatusMessage.ErrorEdit, new { });
         }
 
         [HttpPost]
-        [Route(template: "delete/{term}", Name = "Admin.Term.Delete")]
+        [Route(template: "delete/{id:int}", Name = "Term.Delete")]
         [ServiceFilter(type: typeof(CheckTerm))]
         [ServiceFilter(type: typeof(TermPolicy))]
-        public async Task<JsonResult> Delete(int term)
+        public async Task<JsonResult> Delete(int id)
         {
             Term Term = Request.HttpContext.GetRouteData().Values["Term"] as Term;
 
             string UploadedPathAlready = Term.Image.Path;
-            string RootPath = _Provider.GetRequiredService<IWebHostEnvironment>().WebRootPath + "\\" + _Provider.GetRequiredService<IOptions<Config.File>>().Value.UploadPath;
+            string RootPath = _Provider.GetRequiredService<IWebHostEnvironment>().WebRootPath + "\\" + _Provider.GetRequiredService<IOptions<Config.File>>().Value.UploadPathImagePublic;
             if(System.IO.File.Exists(RootPath + UploadedPathAlready))
                 System.IO.File.Delete(RootPath + UploadedPathAlready);
 
             _Context.Images.Remove(Term.Image);
-            await _Context.SaveChangesAsync();
-
             _Context.Terms.Remove(Term);
+            
             if(Convert.ToBoolean(await _Context.SaveChangesAsync()))
                 return JsonResponse.Return(_StatusCode.SuccessDelete, _StatusMessage.SuccessDelete, new { });
             return JsonResponse.Return(_StatusCode.ErrorDelete, _StatusMessage.ErrorDelete, new { });

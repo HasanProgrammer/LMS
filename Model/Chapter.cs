@@ -43,11 +43,11 @@ namespace Model
             
             /*-------------------------------------------------------*/
 
-            builder.HasMany(Chapter => Chapter.Videos).WithOne(Video => Video.Chapter).OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany(Chapter => Chapter.Videos).WithOne(Video => Video.Chapter).HasForeignKey(Video => Video.ChapterId).OnDelete(DeleteBehavior.Cascade);
             
-            builder.HasOne(Chapter => Chapter.User).WithMany(User => User.Chapters).HasForeignKey(Chapter => Chapter.UserId).OnDelete(DeleteBehavior.Restrict);
+            builder.HasOne(Chapter => Chapter.User).WithMany(User => User.Chapters).HasForeignKey(Chapter => Chapter.UserId).OnDelete(DeleteBehavior.Cascade);
             
-            builder.HasOne(Chapter => Chapter.Term).WithMany(Term => Term.Chapters).HasForeignKey(Chapter => Chapter.TermId).OnDelete(DeleteBehavior.Restrict);
+            builder.HasOne(Chapter => Chapter.Term).WithMany(Term => Term.Chapters).HasForeignKey(Chapter => Chapter.TermId).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

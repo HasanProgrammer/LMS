@@ -31,14 +31,15 @@ namespace Model
         
         /*-----------------------------------------------------------*/
         
-        public virtual ICollection<Buy> Buys           { get; set; }
-        public virtual ICollection<Term> Terms         { get; set; }
-        public virtual ICollection<Video> Videos       { get; set; }
-        public virtual ICollection<Chapter> Chapters   { get; set; }
-        public virtual ICollection<Answer> Answers     { get; set; }
-        public virtual ICollection<Comment> Comments   { get; set; }
-        public virtual ICollection<UserRole> UserRoles { get; set; }
-        public virtual ICollection<Ticket> Tickets     { get; set; }
+        public virtual ICollection<Buy> Buys                 { get; set; }
+        public virtual ICollection<Term> Terms               { get; set; }
+        public virtual ICollection<Video> Videos             { get; set; }
+        public virtual ICollection<Chapter> Chapters         { get; set; }
+        public virtual ICollection<Answer> Answers           { get; set; }
+        public virtual ICollection<Comment> Comments         { get; set; }
+        public virtual ICollection<UserRole> UserRoles       { get; set; }
+        public virtual ICollection<Ticket> Tickets           { get; set; }
+        public virtual ICollection<Transaction> Transactions { get; set; }
     }
     
     /*Relation | Configs*/
@@ -64,23 +65,25 @@ namespace Model
                 
             /*---------------------------------------------------*/
             
-            builder.HasOne(User => User.Image).WithOne(Image => Image.User).HasForeignKey<User>(User => User.ImageId).OnDelete(DeleteBehavior.Restrict);
+            builder.HasOne(User => User.Image).WithOne(Image => Image.User).HasForeignKey<User>(User => User.ImageId);
             
-            builder.HasMany(User => User.UserRoles).WithOne(UR => UR.User).OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany(User => User.UserRoles).WithOne(UR => UR.User).HasForeignKey(UR => UR.UserId).OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasMany(User => User.Chapters).WithOne(Chapter => Chapter.User).OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany(User => User.Chapters).WithOne(Chapter => Chapter.User).HasForeignKey(Chapter => Chapter.UserId).OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasMany(User => User.Terms).WithOne(Term => Term.User).OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany(User => User.Terms).WithOne(Term => Term.User).HasForeignKey(Term => Term.UserId).OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasMany(User => User.Videos).WithOne(Video => Video.User).OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany(User => User.Videos).WithOne(Video => Video.User).HasForeignKey(Video => Video.UserId).OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasMany(User => User.Comments).WithOne(Comment => Comment.User).OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany(User => User.Comments).WithOne(Comment => Comment.User).HasForeignKey(Comment => Comment.UserId).OnDelete(DeleteBehavior.Cascade);
             
-            builder.HasMany(User => User.Answers).WithOne(Answer => Answer.User).OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany(User => User.Answers).WithOne(Answer => Answer.User).HasForeignKey(Answer => Answer.UserId).OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasMany(User => User.Tickets).WithOne(Ticket => Ticket.User).OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany(User => User.Tickets).WithOne(Ticket => Ticket.User).HasForeignKey(Ticket => Ticket.UserId).OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasMany(User => User.Buys).WithOne(Buy => Buy.User).OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany(User => User.Buys).WithOne(Buy => Buy.User).HasForeignKey(Buy => Buy.UserId).OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(User => User.Transactions).WithOne(Tran => Tran.User).HasForeignKey(Tran => Tran.UserId);
         }
     }
 }

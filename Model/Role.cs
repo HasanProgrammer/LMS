@@ -28,7 +28,7 @@ namespace Model
                 
             /*---------------------------------------------------*/
 
-            builder.HasMany(Role => Role.UserRoles).WithOne(UR => UR.Role).OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany(Role => Role.UserRoles).WithOne(UR => UR.Role).HasForeignKey(UR => UR.RoleId).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

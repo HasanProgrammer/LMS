@@ -42,8 +42,10 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="PrivateFiles" />
-      <Folder Include="wwwroot" />
+      <Folder Include="PrivateFiles\Image" />
+      <Folder Include="PrivateFiles\Video" />
+      <Folder Include="wwwroot\Upload\Image" />
+      <Folder Include="wwwroot\Upload\Video" />
     </ItemGroup>
 
     <ItemGroup>

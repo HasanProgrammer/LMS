@@ -22,15 +22,16 @@ namespace DataAccess
     /*Entity*/
     public partial class DatabaseContext
     {
-        public DbSet<Answer> Answers      { get; set; }
-        public DbSet<Buy> Buys            { get; set; }
-        public DbSet<Category> Categories { get; set; }
-        public DbSet<Chapter> Chapters    { get; set; }
-        public DbSet<Comment> Comments    { get; set; }
-        public DbSet<Image> Images        { get; set; }
-        public DbSet<Term> Terms          { get; set; }
-        public DbSet<Ticket> Tickets      { get; set; }
-        public DbSet<Video> Videos        { get; set; }
+        public DbSet<Answer> Answers           { get; set; }
+        public DbSet<Buy> Buys                 { get; set; }
+        public DbSet<Category> Categories      { get; set; }
+        public DbSet<Chapter> Chapters         { get; set; }
+        public DbSet<Comment> Comments         { get; set; }
+        public DbSet<Image> Images             { get; set; }
+        public DbSet<Term> Terms               { get; set; }
+        public DbSet<Ticket> Tickets           { get; set; }
+        public DbSet<Video> Videos             { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
     }
     
     /*Relation*/
@@ -52,6 +53,7 @@ namespace DataAccess
             builder.ApplyConfiguration(new Term());
             builder.ApplyConfiguration(new Ticket());
             builder.ApplyConfiguration(new Video());
+            builder.ApplyConfiguration(new Transaction());
         }
     }
 }

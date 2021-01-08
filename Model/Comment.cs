@@ -46,11 +46,11 @@ namespace Model
             
             /*-------------------------------------------------------*/
             
-            builder.HasOne(Comment => Comment.User).WithMany(User => User.Comments).HasForeignKey(Comment => Comment.UserId).OnDelete(DeleteBehavior.Restrict);
+            builder.HasOne(Comment => Comment.User).WithMany(User => User.Comments).HasForeignKey(Comment => Comment.UserId).OnDelete(DeleteBehavior.Cascade);
             
-            builder.HasOne(Comment => Comment.Term).WithMany(Term => Term.Comments).HasForeignKey(Comment => Comment.TermId).OnDelete(DeleteBehavior.Restrict);
-            
-            builder.HasMany(Comment => Comment.Answers).WithOne(Answer => Answer.Comment).OnDelete(DeleteBehavior.Cascade);
+            builder.HasOne(Comment => Comment.Term).WithMany(Term => Term.Comments).HasForeignKey(Comment => Comment.TermId).OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(Comment => Comment.Answers).WithOne(Answer => Answer.Comment).HasForeignKey(Answer => Answer.CommentId).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

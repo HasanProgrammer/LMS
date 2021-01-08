@@ -44,14 +44,11 @@ namespace WebFramework.Filters.Areas.Admin.UserController
 
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            //I
             IFormFile file = context.ActionArguments.Values.SingleOrDefault(Parameter => Parameter is IFormFile) as IFormFile;
-            var UploadPath = Path.Combine(_Environment.WebRootPath, _File.UploadPath);
+            var UploadPath = Path.Combine(_Environment.WebRootPath, _File.UploadPathImagePublic);
             
-            //II
             if (file != null)
             {
-                //III
                 if (!file.IsImage())
                 {
                     JsonResponse.Handle(context.HttpContext, _StatusCode.IsNotCorrectImageType);
@@ -60,7 +57,6 @@ namespace WebFramework.Filters.Areas.Admin.UserController
                     return;
                 }
                     
-                //IV
                 if (file.Length > _File.MaxSizeImage)
                 {
                     JsonResponse.Handle(context.HttpContext, _StatusCode.MaxSizeImage);
@@ -69,19 +65,16 @@ namespace WebFramework.Filters.Areas.Admin.UserController
                     return;
                 }
                     
-                //V
                 var UploadedPathAlready = (context.HttpContext.GetRouteData().Values["User"] as User)?.Image?.Path;
-                var RootPath = _Environment.WebRootPath + "\\" + _File.UploadPath;
-                if(File.Exists(RootPath + UploadedPathAlready))
-                    File.Delete(RootPath + UploadedPathAlready);
+                if(File.Exists(UploadPath + UploadedPathAlready))
+                    File.Delete(UploadPath + UploadedPathAlready);
 
-                //VI
                 var FileExtension = Path.GetExtension(file.FileName);
                 var NewFileName   = Guid.NewGuid().ToString().Replace("-", "") + FileExtension;
                 var FileStream    = new FileStream(Path.Combine(UploadPath, NewFileName) , FileMode.Create);
                 file.CopyTo(FileStream);
+                FileStream.Close();
                     
-                //VII
                 context.HttpContext.GetRouteData().Values.Add("ImagePath", NewFileName);
                 context.HttpContext.GetRouteData().Values.Add("ImageType", FileExtension);
             }

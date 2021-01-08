@@ -15,8 +15,8 @@ namespace WebFramework.Filters.Areas.Admin.UserController
 {
     public class CheckUser : ActionFilterAttribute
     {
-        //Services
-        private readonly IUserService<UsersViewModel, User> _UserService;
+        //DataService
+        private readonly UserService<UsersViewModel, User> _UserService;
         
         //Configs
         private readonly Config.StatusCode _StatusCode;
@@ -24,12 +24,12 @@ namespace WebFramework.Filters.Areas.Admin.UserController
         
         public CheckUser
         (
-            IUserService<UsersViewModel, User>  UserService, 
-            IOptions<Config.StatusCode> StatusCode, 
-            IOptions<Config.Messages>   StatusMessage
+            IOptions<Config.StatusCode>       StatusCode, 
+            IOptions<Config.Messages>         StatusMessage,
+            UserService<UsersViewModel, User> UserService
         )
         {
-            //Services
+            //DataService
             _UserService = UserService;
             
             //Configs

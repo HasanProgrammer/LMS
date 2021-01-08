@@ -149,19 +149,28 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("Model.Buy", b =>
                 {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int?>("TermId")
-                        .HasColumnType("int");
+                    b.Property<int?>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
 
                     b.Property<string>("CreatedAt")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("UserId", "TermId");
+                    b.Property<int?>("TermId")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("TermId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Purchases");
                 });
@@ -437,6 +446,61 @@ namespace DataAccess.Migrations
                     b.ToTable("Tickets");
                 });
 
+            modelBuilder.Entity("Model.Transaction", b =>
+                {
+                    b.Property<int?>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("CreatedAt")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Price")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<string>("RefId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("StatusCode")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TermId")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<string>("UpdatedAt")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserEmail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserPhone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TermId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Transactions");
+                });
+
             modelBuilder.Entity("Model.User", b =>
                 {
                     b.Property<string>("Id")
@@ -569,6 +633,10 @@ namespace DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Duration")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsFree")
                         .HasColumnType("bit");
 
@@ -578,6 +646,10 @@ namespace DataAccess.Migrations
                     b.Property<int?>("TermId")
                         .IsRequired()
                         .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UpdatedAt")
                         .IsRequired()
@@ -668,7 +740,7 @@ namespace DataAccess.Migrations
                     b.HasOne("Model.User", "User")
                         .WithMany("Buys")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Term");
@@ -687,7 +759,7 @@ namespace DataAccess.Migrations
                     b.HasOne("Model.User", "User")
                         .WithMany("Chapters")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Term");
@@ -706,7 +778,7 @@ namespace DataAccess.Migrations
                     b.HasOne("Model.User", "User")
                         .WithMany("Comments")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Term");
@@ -728,19 +800,19 @@ namespace DataAccess.Migrations
                     b.HasOne("Model.Category", "Category")
                         .WithMany("Terms")
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Model.Image", "Image")
                         .WithOne("Term")
                         .HasForeignKey("Model.Term", "ImageId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Model.User", "User")
                         .WithMany("Terms")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Category");
@@ -755,13 +827,32 @@ namespace DataAccess.Migrations
                     b.HasOne("Model.Term", "Term")
                         .WithMany("Tickets")
                         .HasForeignKey("TermId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Model.User", "User")
                         .WithMany("Tickets")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Term");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Model.Transaction", b =>
+                {
+                    b.HasOne("Model.Term", "Term")
+                        .WithMany("Transactions")
+                        .HasForeignKey("TermId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Model.User", "User")
+                        .WithMany("Transactions")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Term");
@@ -773,8 +864,7 @@ namespace DataAccess.Migrations
                 {
                     b.HasOne("Model.Image", "Image")
                         .WithOne("User")
-                        .HasForeignKey("Model.User", "ImageId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("Model.User", "ImageId");
 
                     b.Navigation("Image");
                 });
@@ -784,13 +874,13 @@ namespace DataAccess.Migrations
                     b.HasOne("Model.Role", "Role")
                         .WithMany("UserRoles")
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Model.User", "User")
                         .WithMany("UserRoles")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Role");
@@ -803,12 +893,12 @@ namespace DataAccess.Migrations
                     b.HasOne("Model.Chapter", "Chapter")
                         .WithMany("Videos")
                         .HasForeignKey("ChapterId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Model.Term", "Term")
                         .WithMany("Videos")
                         .HasForeignKey("TermId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Model.User", "User")
@@ -861,6 +951,8 @@ namespace DataAccess.Migrations
 
                     b.Navigation("Tickets");
 
+                    b.Navigation("Transactions");
+
                     b.Navigation("Videos");
                 });
 
@@ -877,6 +969,8 @@ namespace DataAccess.Migrations
                     b.Navigation("Terms");
 
                     b.Navigation("Tickets");
+
+                    b.Navigation("Transactions");
 
                     b.Navigation("UserRoles");
 

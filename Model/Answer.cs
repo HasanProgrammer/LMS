@@ -39,7 +39,7 @@ namespace Model
             
             /*-------------------------------------------------------*/
             
-            builder.HasOne(Answer => Answer.Comment).WithMany(Comment => Comment.Answers).HasForeignKey(Answer => Answer.CommentId).OnDelete(DeleteBehavior.Restrict);
+            builder.HasOne(Answer => Answer.Comment).WithMany(Comment => Comment.Answers).HasForeignKey(Answer => Answer.CommentId).OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(Answer => Answer.User).WithMany(User => User.Answers).HasForeignKey(Answer => Answer.UserId).OnDelete(DeleteBehavior.Cascade);
         }

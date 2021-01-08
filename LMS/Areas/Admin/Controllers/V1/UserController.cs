@@ -17,8 +17,8 @@ namespace LMS.Areas.Admin.Controllers.V1
     [ApiVersion(version: "1.0")]
     public class UserController : BaseUserController
     {
-        //Services
-        protected readonly IUserService<UsersViewModel, User> _UserService;
+        //DataService
+        protected readonly UserService<UsersViewModel, User> _UserService;
         
         //Managers
         protected readonly UserManager<User> _UserManager;
@@ -30,14 +30,14 @@ namespace LMS.Areas.Admin.Controllers.V1
         
         public UserController
         (
-            IUserService<UsersViewModel, User> UserService,
+            UserService<UsersViewModel, User> UserService,
             UserManager<User>           UserManager,
             RoleManager<Role>           RoleManager,
             IOptions<Config.StatusCode> StatusCode,
             IOptions<Config.Messages>   StatusMessage
         )
         {
-            //Services
+            //DataService
             _UserService = UserService;
             
             //Managers

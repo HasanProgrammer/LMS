@@ -16,8 +16,8 @@ namespace LMS.Areas.Admin.Controllers.V1
     [ApiVersion("1.0")]
     public class RoleController : BaseRoleController
     {
-        //Services
-        private readonly IRoleService<RolesViewModel, Role> _RoleService;
+        //DataService
+        private readonly RoleService<RolesViewModel, Role> _RoleService;
         
         //Managers
         private readonly UserManager<User> _UserManager;
@@ -29,14 +29,14 @@ namespace LMS.Areas.Admin.Controllers.V1
         
         public RoleController
         (
-            IRoleService<RolesViewModel, Role> RoleService,
+            RoleService<RolesViewModel, Role> RoleService,
             UserManager<User>           UserManager,
             RoleManager<Role>           RoleManager,
             IOptions<Config.StatusCode> StatusCode,
             IOptions<Config.Messages>   StatusMessage
         )
         {
-            //Services
+            //DataService
             _RoleService = RoleService;
             
             //Managers

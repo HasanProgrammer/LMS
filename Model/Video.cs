@@ -11,6 +11,8 @@ namespace Model
         public string UserId    { get; set; }
         public int? ChapterId   { get; set; }
         public int? TermId      { get; set; }
+        public string Title     { get; set; }
+        public string Duration  { get; set; }
         public string VideoFile { get; set; }
         public bool IsFree      { get; set; } = false;
         public Status Status    { get; set; }
@@ -38,6 +40,8 @@ namespace Model
             builder.Property(Video => Video.Id)       .IsRequired();
             builder.Property(Video => Video.UserId)   .IsRequired();
             builder.Property(Video => Video.TermId)   .IsRequired();
+            builder.Property(Video => Video.Title)    .IsRequired();
+            builder.Property(Video => Video.Duration) .IsRequired();
             builder.Property(Video => Video.VideoFile).IsRequired();
             builder.Property(Video => Video.Status)   .IsRequired().HasConversion(new EnumToNumberConverter<Status, int>());
             builder.Property(Video => Video.CreatedAt).IsRequired();
@@ -45,9 +49,9 @@ namespace Model
             
             /*-------------------------------------------------------*/
             
-            builder.HasOne(Video => Video.Chapter).WithMany(Chapter => Chapter.Videos).HasForeignKey(Video => Video.ChapterId).OnDelete(DeleteBehavior.Restrict);
+            builder.HasOne(Video => Video.Chapter).WithMany(Chapter => Chapter.Videos).HasForeignKey(Video => Video.ChapterId).OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasOne(Video => Video.Term).WithMany(Term => Term.Videos).HasForeignKey(Video => Video.TermId).OnDelete(DeleteBehavior.Restrict);
+            builder.HasOne(Video => Video.Term).WithMany(Term => Term.Videos).HasForeignKey(Video => Video.TermId).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

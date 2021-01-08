@@ -14,7 +14,7 @@ namespace WebFramework.Filters.Areas.Admin.UserController
 {
     public class CheckPassword : ActionFilterAttribute
     {
-        //Services
+        //DataService
         private readonly UserManager<User> _UserManager;
         
         //Configs
@@ -30,7 +30,7 @@ namespace WebFramework.Filters.Areas.Admin.UserController
             IOptions<Config.Password>   Password
         )
         {
-            //Services
+            //DataService
             _UserManager = UserManager;
             
             //Configs

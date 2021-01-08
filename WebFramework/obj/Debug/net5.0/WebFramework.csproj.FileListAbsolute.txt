@@ -4,9 +4,9 @@ C:\Users\Programmer\Desktop\ASP Projects\LMS\WebFramework\bin\Debug\net5.0\ref\W
 C:\Users\Programmer\Desktop\ASP Projects\LMS\WebFramework\bin\Debug\net5.0\WebFramework.pdb
 C:\Users\Programmer\Desktop\ASP Projects\LMS\WebFramework\bin\Debug\net5.0\Common.dll
 C:\Users\Programmer\Desktop\ASP Projects\LMS\WebFramework\bin\Debug\net5.0\DataAccess.dll
+C:\Users\Programmer\Desktop\ASP Projects\LMS\WebFramework\bin\Debug\net5.0\DataService.dll
 C:\Users\Programmer\Desktop\ASP Projects\LMS\WebFramework\bin\Debug\net5.0\Model.dll
-C:\Users\Programmer\Desktop\ASP Projects\LMS\WebFramework\bin\Debug\net5.0\Service.dll
-C:\Users\Programmer\Desktop\ASP Projects\LMS\WebFramework\bin\Debug\net5.0\Service.pdb
+C:\Users\Programmer\Desktop\ASP Projects\LMS\WebFramework\bin\Debug\net5.0\DataService.pdb
 C:\Users\Programmer\Desktop\ASP Projects\LMS\WebFramework\bin\Debug\net5.0\Common.pdb
 C:\Users\Programmer\Desktop\ASP Projects\LMS\WebFramework\bin\Debug\net5.0\DataAccess.pdb
 C:\Users\Programmer\Desktop\ASP Projects\LMS\WebFramework\bin\Debug\net5.0\Model.pdb

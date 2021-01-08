@@ -21,8 +21,8 @@ namespace LMS.Areas.Admin.Controllers.V1
     [ApiVersion("1.0")]
     public class CategoryController : BaseCategoryController
     {
-        //Services
-        private readonly ICategoryService<CategoriesViewModel, Category> _CategoryService;
+        //DataService
+        private readonly CategoryService<CategoriesViewModel, Category> _CategoryService;
         
         //Managers
         private readonly UserManager<User> _UserManager;
@@ -39,7 +39,7 @@ namespace LMS.Areas.Admin.Controllers.V1
         
         public CategoryController
         (
-            ICategoryService<CategoriesViewModel, Category> CategoryService,
+            CategoryService<CategoriesViewModel, Category> CategoryService,
             IHttpContextAccessor        HttpContextAccessor,
             IOptions<Config.StatusCode> StatusCode,
             IOptions<Config.Messages>   StatusMessage,
@@ -47,7 +47,7 @@ namespace LMS.Areas.Admin.Controllers.V1
             DatabaseContext             Context
         )
         {
-            //Services
+            //DataService
             _CategoryService = CategoryService;
             
             //Managers

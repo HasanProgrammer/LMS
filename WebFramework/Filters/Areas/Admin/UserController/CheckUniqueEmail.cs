@@ -13,7 +13,7 @@ namespace WebFramework.Filters.Areas.Admin.UserController
 {
     public class CheckUniqueEmail : ActionFilterAttribute
     {
-        //Services
+        //DataService
         private readonly UserManager<User> _UserManager;
         
         //Configs
@@ -27,7 +27,7 @@ namespace WebFramework.Filters.Areas.Admin.UserController
             IOptions<Config.Messages>   StatusMessage
         )
         {
-            //Services
+            //DataService
             _UserManager = UserManager;
             
             //Configs
