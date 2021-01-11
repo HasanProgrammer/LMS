@@ -59,15 +59,20 @@ namespace LMS.Areas.Admin.Controllers.V1
         public JsonResult Login(LoginUserViewModel model)
         {
             User user = Request.HttpContext.GetRouteData().Values["User"] as User;
-            JWT code = new JWT(_JWT.Key);
+            JWT code  = new JWT(_JWT.Key);
 
             /*PayLoad; Data*/
             return code.SetClaims
             (
-                new Claim(ClaimTypes.Name, user.UserName) /*این قسمت ضروری است . و از این ویژگی برای شناسایی کاربر لاگین کرده استفاده می شود*/
+                new Claim("UserPhone", user.Phone),
+                new Claim("UserEmail", user.Email)
             )
             .SetClaimsIdentity(identity =>
             {
+                /*این قسمت ضروری است . و از این ویژگی برای شناسایی کاربر لاگین کرده استفاده می شود*/
+                identity.AddClaim(new Claim(ClaimTypes.Name, user.UserName));
+                
+                /*این قسمت ضروری است . و از این ویژگی برای شناسایی ( نقش ) کاربر لاگین کرده استفاده می شود*/
                 identity.AddClaims
                 (
                     _UserManager.GetRolesAsync(user).Result.Select(role => new Claim(ClaimTypes.Role, role))
@@ -87,9 +92,7 @@ namespace LMS.Areas.Admin.Controllers.V1
             })
             .Execute(result => JsonResponse.Return(_StatusCode.SuccessLogin, _StatusMessage.SuccessLogin, new
             {
-                Token     = result,
-                UserName  = user.UserName,
-                UserImage = user.Image != null ? $"{_File.UploadPathImagePublic.Replace("\\", "/")}{user.Image.Path}" : null
+                Token = result
             }));
         }
     }

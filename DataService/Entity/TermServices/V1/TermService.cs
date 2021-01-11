@@ -145,10 +145,12 @@ namespace DataService.Entity.TermServices.V1
                     Title  = Chapter.Title,
                     Videos = Chapter.Videos?.Select(Video => new VideosViewModel
                     {
-                        Id       = Video.Id,
-                        Title    = Video.Title,
-                        Duration = Video.Duration,
-                        Video    = Video.IsFree ? $"{ _Config.GetValue<string>("File:UploadPathVideoPublic").Replace("\\", "/") }{ Video.VideoFile }" : null
+                        Id          = Video.Id,
+                        Title       = Video.Title,
+                        Duration    = Video.Duration,
+                        IsFreeKey   = Video.IsFree ? 1 : 0,
+                        IsFreeValue = Video.IsFree ? "رایگان" : "غیر رایگان",
+                        Video       = Video.IsFree ? $"{ _Config.GetValue<string>("File:UploadPathVideoPublic").Replace("\\", "/") }{ Video.VideoFile }" : null
                     }).ToList()
                 }).ToList();
             }
@@ -156,10 +158,12 @@ namespace DataService.Entity.TermServices.V1
             {
                 model.Videos = TermTarget.Videos.Select(Video => new VideosViewModel
                 {
-                    Id       = Video.Id,
-                    Title    = Video.Title,
-                    Duration = Video.Duration,
-                    Video    = Video.IsFree ? $"{ _Config.GetValue<string>("File:UploadPathVideoPublic").Replace("\\", "/") }{ Video.VideoFile }" : null
+                    Id          = Video.Id,
+                    Title       = Video.Title,
+                    Duration    = Video.Duration,
+                    IsFreeKey   = Video.IsFree ? 1 : 0,
+                    IsFreeValue = Video.IsFree ? "رایگان" : "غیر رایگان",
+                    Video       = Video.IsFree ? $"{ _Config.GetValue<string>("File:UploadPathVideoPublic").Replace("\\", "/") }{ Video.VideoFile }" : null
                 }).ToList();
             }
 
@@ -235,10 +239,12 @@ namespace DataService.Entity.TermServices.V1
                         Title  = Chapter.Title,
                         Videos = Chapter.Videos?.Where(Video => Video.Status == Model.Enums.Video.Status.Active).Select(Video => new VideosViewModel
                         {
-                            Id       = Video.Id,
-                            Title    = Video.Title,
-                            Duration = Video.Duration,
-                            Video    = Video.IsFree ? $"{ _Config.GetValue<string>("File:UploadPathVideoPublic").Replace("\\", "/") }{ Video.VideoFile }" : null
+                            Id          = Video.Id,
+                            Title       = Video.Title,
+                            Duration    = Video.Duration,
+                            IsFreeKey   = Video.IsFree ? 1 : 0,
+                            IsFreeValue = Video.IsFree ? "رایگان" : "غیر رایگان",
+                            Video       = Video.IsFree ? $"{ _Config.GetValue<string>("File:UploadPathVideoPublic").Replace("\\", "/") }{ Video.VideoFile }" : null
                         }).ToList()
                     }).ToList();
                 }
@@ -246,10 +252,12 @@ namespace DataService.Entity.TermServices.V1
                 {
                     model.Videos = TermTarget.Videos?.Select(Video => new VideosViewModel
                     {
-                        Id       = Video.Id, 
-                        Title    = Video.Title,
-                        Duration = Video.Duration,
-                        Video    = Video.IsFree ? $"{ _Config.GetValue<string>("File:UploadPathVideoPublic").Replace("\\", "/") }{ Video.VideoFile }" : null
+                        Id          = Video.Id, 
+                        Title       = Video.Title,
+                        Duration    = Video.Duration,
+                        IsFreeKey   = Video.IsFree ? 1 : 0,
+                        IsFreeValue = Video.IsFree ? "رایگان" : "غیر رایگان",
+                        Video       = Video.IsFree ? $"{ _Config.GetValue<string>("File:UploadPathVideoPublic").Replace("\\", "/") }{ Video.VideoFile }" : null
                     }).ToList();
                 }
             

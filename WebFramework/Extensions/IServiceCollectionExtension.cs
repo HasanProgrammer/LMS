@@ -19,9 +19,7 @@ using DataService.Entity.RoleServices.V1;
 using DataService.Entity.TermServices.V1;
 using DataService.Entity.UserServices.V2;
 using DataService.Entity.VideoServices.V1;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
-using Service.Web.Mail;
+using DataService.Web.Mail;
 using WebFramework.Exceptions;
 using WebFramework.Filters;
 
@@ -161,7 +159,7 @@ namespace WebFramework.Extensions
                 /*در صورت وجود هر گونه تفاوتی بین داده های تنظیم شده در سرور با اطلاعات ارسالی از سمت کاربر ( توکن ) ؛ اعتبارسنجی کاربر نامعتبر خواهد شد*/
                 Config.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidIssuer      = configuration.GetValue<string>("JWT:Issuer"), /*صادر کننده*/
+                    ValidIssuer      = configuration.GetValue<string>("JWT:Issuer"),   /*صادر کننده*/
                     ValidAudience    = configuration.GetValue<string>("JWT:Audience"), /*مصرف کننده*/
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes( configuration.GetValue<string>("JWT:Key") )),
                     
@@ -237,12 +235,12 @@ namespace WebFramework.Extensions
 
         public static IServiceCollection AddSessionContainer(this IServiceCollection service, IConfiguration configuration)
         {
-            service.AddDistributedMemoryCache();
-            service.AddSession(Config =>
-            {
-                Config.IdleTimeout = TimeSpan.FromMinutes(configuration.GetValue<int>("Session:Timer"));
-            });
-            service.AddMvc();
+            // service.AddDistributedMemoryCache();
+            // service.AddSession(Config =>
+            // {
+            //     Config.IdleTimeout = TimeSpan.FromMinutes(configuration.GetValue<int>("Session:Timer"));
+            // });
+            // service.AddMvc();
 
             return service;
         }

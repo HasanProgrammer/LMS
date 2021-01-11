@@ -8,7 +8,7 @@ using MailKit.Net.Smtp;
 using Microsoft.Extensions.Options;
 using MimeKit;
 
-namespace Service.Web.Mail
+namespace DataService.Web.Mail
 {
     public class EmailSender : IMailSender
     {

@@ -248,7 +248,7 @@ namespace LMS.Controllers.V1
             {
                 Description = Term.Name,
                 Amount      = Convert.ToInt32(Term.Price),
-                CallbackUrl = $"{ _ZarinPal.CallbackURL }?Term={id}&Amount={Term.Price}&User={ User.Id }&UserPhone={User.Phone}&UserEmail={User.Email}",
+                CallbackUrl = $"{ _ZarinPal.CallbackURL }?Term={id}&Amount={Term.Price}&User={User.Id}&UserPhone={User.Phone}&UserEmail={User.Email}",
                 MerchantId  = _ZarinPal.MerchantID 
             }, Payment.Mode.sandbox);
             
@@ -257,7 +257,7 @@ namespace LMS.Controllers.V1
             return JsonResponse.Return(_StatusCode.ErrorGateRequest, _StatusMessage.ErrorGateRequest, new { });
         }
 
-        /*در این متد ، نتیجه خرید کاربر از طرف زرین پال دریافت میشود که آیا پرداخت موفق بوده یا خیر*/
+        /*در این متد ، نتیجه خرید کاربر از طرف زرین پال دریافت میشود که آیا پرداخت موفق بوده یا خیر*/ 
         [HttpGet]
         [Route(template: "purchase/verification", Name = "Home.Term.Purchase.Verification")]
         public async Task<JsonResult> VerificationPurchase()
@@ -302,8 +302,8 @@ namespace LMS.Controllers.V1
                     });
                     await _Context.Buys.AddAsync(new Buy
                     {
-                        UserId    = Request.Query["User"] , 
-                        TermId    = Convert.ToInt32(Request.Query["Term"]) , 
+                        UserId    = Request.Query["User"], 
+                        TermId    = Convert.ToInt32(Request.Query["Term"]),
                         CreatedAt = PersianDatetime.Now()
                     });
                     await _Context.SaveChangesAsync();

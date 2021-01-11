@@ -21,8 +21,8 @@ namespace Common
         
         /*--------------------------------------------------------*/
         
-        private SecurityTokenDescriptor _TokenDescriptor;
         private ClaimsIdentity          _Identity;
+        private SecurityTokenDescriptor _TokenDescriptor;
 
         public JWT(string key)
         {
@@ -32,12 +32,11 @@ namespace Common
 
         public JWT SetClaims(params Claim[] claims) //PayLoad's Data
         {
-            foreach (var claim in claims)
-                _Claims.Add(claim);
+            _Claims.AddRange(claims);
             return this;
         }
 
-        public JWT SetClaimsIdentity(ClaimsIdentityDelegate @delegate) //JWT's Role
+        public JWT SetClaimsIdentity(ClaimsIdentityDelegate @delegate) //Identity's Data
         {
             _Identity = new ClaimsIdentity(_Claims);
             @delegate(_Identity);

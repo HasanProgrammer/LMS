@@ -16,6 +16,7 @@ namespace Model
         public string Phone            { get; set; }
         public string EmailCode        { get; set; }
         public int? PhoneCode          { get; set; }
+        public string Description      { get; set; }
         public bool IsVerifyEmail      { get; set; } = false;
         public bool IsVerifyPhone      { get; set; } = false;
         public Status Status           { get; set; }
