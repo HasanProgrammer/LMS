@@ -39,7 +39,7 @@ namespace WebFramework.Filters.Areas.Admin.CategoryController
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             //I
-            Category category = _CategoryService.FindWithIdEntity( Convert.ToInt32(context.HttpContext.GetRouteData().Values["id"]) );
+            Category category = _CategoryService.FindWithIdEntityWithEagerLoadingAsNoTracking( Convert.ToInt32(context.HttpContext.GetRouteData().Values["id"]) );
             
             //II
             if (category == null)

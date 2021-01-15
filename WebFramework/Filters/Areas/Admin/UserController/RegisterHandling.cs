@@ -61,6 +61,8 @@ namespace WebFramework.Filters.Areas.Admin.UserController
                 UserName           = model.Username,
                 Email              = model.Email,
                 Phone              = model.Phone,
+                Description        = model.Description,
+                Expert             = model.Expert, 
                 Status             = Model.Enums.User.Status.Active,
                 IsVerifyEmail      = true, 
                 IsVerifyPhone      = true, 

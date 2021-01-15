@@ -293,6 +293,21 @@ namespace DataAccess.CustomRepositories
             throw new System.NotImplementedException();
         }
 
+        public virtual Task<List<TModel>> FindAllEntityForTermWithNoTrackingAsync(int term)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public virtual Task<List<TModel>> FindAllEntityForUserWithNoTrackingAndActiveAsync(User user)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public virtual Task<List<TModel>> FindAllEntityForUserAndTermWithNoTrackingAsync(User user, int id)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public virtual Task<TModel> FindWithIdActiveEntityAsNoTrackingAsync(int? id)
         {
             throw new System.NotImplementedException();

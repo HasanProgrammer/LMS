@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Common;
 using DataAccess;
@@ -39,6 +41,23 @@ namespace LMS.Controllers.V1
             _Context       = Context;
             _StatusCode    = StatusCode.Value;
             _StatusMessage = StatusMessage.Value;
+        }
+
+        [HttpGet]
+        [Route(template: "all", Name = "Term.All")]
+        public async Task<JsonResult> All()
+        {
+            UserManager<User> UserManager                 = _Provider.GetRequiredService< UserManager<User> >();
+            TermService<TermsViewModel, Term> TermService = _Provider.GetRequiredService< TermService<TermsViewModel , Term> >();
+            
+            List<Term> Terms = await UserManager.HasRoleAsync(Request.HttpContext, "Admin") ?
+                               await TermService.FindAllActiveEntityAsNoTrackingAsync() :
+                               await TermService.FindAllEntityForUserWithNoTrackingAndActiveAsync(await UserManager.GetCurrentUserAsync(Request.HttpContext));
+            
+            return JsonResponse.Return(_StatusCode.SuccessFetchData, _StatusMessage.SuccessFetchData, new
+            {
+                Terms = Terms.Select(Term => new { Term.Id , Term.Name }).ToList()
+            });
         }
 
         [HttpGet]

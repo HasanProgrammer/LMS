@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Common;
 using DataAccess.CustomRepositories;
 using DataAccess.ViewModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -48,7 +49,12 @@ namespace WebFramework.Filters.Controllers.ChapterController
         {
             //I
             Term Term = _TermService.FindWithIdEntityAsNoTracking (
+                context.HttpContext.GetEndpoint().Metadata.GetMetadata<EndpointNameMetadata>().EndpointName.Equals("Chapter.Create") ||
+                context.HttpContext.GetEndpoint().Metadata.GetMetadata<EndpointNameMetadata>().EndpointName.Equals("Chapter.Edit")
+                ?
                 (context.ActionArguments.Values.SingleOrDefault(Parameter => Parameter is CreateChapterViewModel) as CreateChapterViewModel).Term
+                :
+                Convert.ToInt32(context.HttpContext.GetRouteData().Values["id"])
             );
             
             //II

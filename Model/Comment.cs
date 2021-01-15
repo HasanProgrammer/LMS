@@ -7,7 +7,7 @@ namespace Model
 {
     public partial class Comment : Entity
     {
-        public string UserId  { get; set; }
+        public string UserId  { get; set; } /*ناشر پرسش*/
         public int? TermId    { get; set; }
         public string Title   { get; set; }
         public string Content { get; set; }

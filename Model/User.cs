@@ -16,6 +16,7 @@ namespace Model
         public string Phone            { get; set; }
         public string EmailCode        { get; set; }
         public int? PhoneCode          { get; set; }
+        public string Expert           { get; set; }
         public string Description      { get; set; }
         public bool IsVerifyEmail      { get; set; } = false;
         public bool IsVerifyPhone      { get; set; } = false;
@@ -59,6 +60,8 @@ namespace Model
             builder.Property(User => User.Id)                .IsRequired();
             builder.Property(User => User.Email)             .IsRequired();
             builder.Property(User => User.Phone)             .IsRequired();
+            builder.Property(User => User.Expert)            .IsRequired();
+            builder.Property(User => User.Description)       .IsRequired();
             builder.Property(User => User.Status)            .IsRequired().HasConversion(new EnumToNumberConverter<Status, int>());
             builder.Property(User => User.CreatedAtTimeStamp).IsRequired();
             builder.Property(User => User.CreatedAt)         .IsRequired();
@@ -84,7 +87,7 @@ namespace Model
 
             builder.HasMany(User => User.Buys).WithOne(Buy => Buy.User).HasForeignKey(Buy => Buy.UserId).OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasMany(User => User.Transactions).WithOne(Tran => Tran.User).HasForeignKey(Tran => Tran.UserId);
+            builder.HasMany(User => User.Transactions).WithOne(Tran => Tran.User).HasForeignKey(Tran => Tran.UserId).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

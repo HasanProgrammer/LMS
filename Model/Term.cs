@@ -80,7 +80,7 @@ namespace Model
             
             builder.HasMany(Term => Term.Buys).WithOne(Buy => Buy.Term).HasForeignKey(Buy => Buy.TermId).OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasMany(Term => Term.Transactions).WithOne(Tran => Tran.Term).HasForeignKey(Tran => Tran.TermId);
+            builder.HasMany(Term => Term.Transactions).WithOne(Tran => Tran.Term).HasForeignKey(Tran => Tran.TermId).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

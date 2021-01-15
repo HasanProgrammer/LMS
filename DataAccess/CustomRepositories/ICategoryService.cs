@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Model;
 using Model.Bases;
 
 namespace DataAccess.CustomRepositories

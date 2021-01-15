@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using DataAccess.CustomClasses;
+using Model;
 using Model.Bases;
 
 namespace DataAccess.CustomRepositories

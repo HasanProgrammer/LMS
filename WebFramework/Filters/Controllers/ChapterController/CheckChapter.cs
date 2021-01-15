@@ -48,7 +48,7 @@ namespace WebFramework.Filters.Controllers.ChapterController
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             //I
-            Chapter Chapter = _ChapterService.FindWithIdEntity (
+            Chapter Chapter = _ChapterService.FindWithIdEntityWithEagerLoadingAsNoTracking (
                 Convert.ToInt32(context.HttpContext.GetRouteData().Values["id"])
             );
             

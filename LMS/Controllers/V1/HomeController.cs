@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -194,20 +195,17 @@ namespace LMS.Controllers.V1
         [Route(template: "video/public/download/{id:int}", Name = "Home.Term.Video.Public.Download")]
         [ServiceFilter(type: typeof(CheckVideo))]
         [ServiceFilter(type: typeof(VideoPolicy))]
-        public HttpResponseMessage DownloadVideoPublic(int id)
+        public IActionResult DownloadVideoPublic(int id)
         {
             Video Video = Request.HttpContext.GetRouteData().Values["Video"] as Video;
-
-            string VideoPathPublic      = _Provider.GetRequiredService<IWebHostEnvironment>().WebRootPath + "\\" + _Config.GetValue<string>("File:UploadPathVideoPublic");
-            FileStream Stream           = new FileStream(VideoPathPublic + "\\" + Video.VideoFile, FileMode.Open, FileAccess.Read);
-            HttpResponseMessage Message = new HttpResponseMessage();
             
-            Message.Content                                     = new StreamContent(Stream);
-            Message.Content.Headers.ContentDisposition          = new ContentDispositionHeaderValue("attachment");
-            Message.Content.Headers.ContentDisposition.FileName = Video.Title;
+            JsonResponse.Handle(Request.HttpContext, "X-Video-Name", new { Name = Video.VideoFile });
+            
+            string VideoPathPublic = _Provider.GetRequiredService<IWebHostEnvironment>().WebRootPath + "\\" + _Config.GetValue<string>("File:UploadPathVideoPublic");
 
-            Stream.Close();
-            return Message;
+            FileStream Stream       = new FileStream(VideoPathPublic + Video.VideoFile, FileMode.Open, FileAccess.Read);
+            FileStreamResult Result = File(Stream, "application/octet-stream", Video.VideoFile);
+            return Result;
         }
 
         [HttpGet]
@@ -215,23 +213,19 @@ namespace LMS.Controllers.V1
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [ServiceFilter(type: typeof(CheckVideo))]
         [ServiceFilter(type: typeof(VideoPolicy))]
-        public HttpResponseMessage DownloadVideo(int id)
+        public IActionResult DownloadVideo(int id)
         {
             Video Video = Request.HttpContext.GetRouteData().Values["Video"] as Video;
-
+            
+            JsonResponse.Handle(Request.HttpContext, "X-Video-Name", new { Name = Video.VideoFile });
+            
             string VideoPathPublic  = _Provider.GetRequiredService<IWebHostEnvironment>().WebRootPath     + "\\" + _Config.GetValue<string>("File:UploadPathVideoPublic");
             string VideoPathPrivate = _Provider.GetRequiredService<IWebHostEnvironment>().ContentRootPath + "\\" + _Config.GetValue<string>("File:UploadPathVideoPrivate");
-            string VideoFinalPath   = Video.IsFree ? VideoPathPublic + "\\" + Video.VideoFile : VideoPathPrivate + "\\" + Video.VideoFile;
+            string VideoFinalPath   = Video.IsFree ? VideoPathPublic + Video.VideoFile : VideoPathPrivate + Video.VideoFile;
 
-            FileStream Stream           = new FileStream(VideoFinalPath, FileMode.Open, FileAccess.Read);
-            HttpResponseMessage Message = new HttpResponseMessage();
-            
-            Message.Content                                     = new StreamContent(Stream);
-            Message.Content.Headers.ContentDisposition          = new ContentDispositionHeaderValue("attachment");
-            Message.Content.Headers.ContentDisposition.FileName = Video.Title;
-
-            Stream.Close();
-            return Message;
+            FileStream Stream       = new FileStream(VideoFinalPath, FileMode.Open, FileAccess.Read);
+            FileStreamResult Result = File(Stream, "application/octet-stream", Video.VideoFile);
+            return Result;
         }
 
         /*در این متد ، یک درخواست خرید ( خرید دوره برنامه نویسی ) به زرین پال ارسال می گردد*/
@@ -317,11 +311,18 @@ namespace LMS.Controllers.V1
                     string MainMessage  = "یک خرید جدید به شماره تراکنش : " + $"{ Result.RefId }" + " در سیستم ثبت گردید است ";
                     
                     await _EmailSender.SendFromHtmlAsync(new List<string> { Term.User.Email , _AdminData.Email }, $"<div dir='rtl'>{ TitleMessage }</div>", $"<div dir='rtl'>{ MainMessage }</div>");
-                    
-                    KavenegarApi sms = new KavenegarApi(_Config.GetValue<string>("SMS:Key"));
-                    sms.Send(_Config.GetValue<string>("SMS:Sender"), _AdminData.Phone, TitleMessage + " | " + MainMessage);
-                    sms.Send(_Config.GetValue<string>("SMS:Sender"), Term.User.Phone , TitleMessage + " | " + MainMessage);
-                    
+
+                    try
+                    {
+                        KavenegarApi sms = new KavenegarApi(_Config.GetValue<string>("SMS:Key"));
+                        sms.Send(_Config.GetValue<string>("SMS:Sender"), _AdminData.Phone, TitleMessage + " | " + MainMessage);
+                        sms.Send(_Config.GetValue<string>("SMS:Sender"), Term.User.Phone , TitleMessage + " | " + MainMessage);
+                    }
+                    catch (Exception e)
+                    {
+                        /*در این قسمت باید یک هشداری مانند ارسال پست الکترونیکی به مدیر سیستم مبنی بر اشکال در ارسال پیامک ، ارسال گردد*/
+                    }
+
                     /*-----------------------------------------------*/
                     
                     return JsonResponse.Return(_StatusCode.SuccessPayment, _StatusMessage.SuccessPayment, new 

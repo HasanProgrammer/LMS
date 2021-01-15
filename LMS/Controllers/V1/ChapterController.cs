@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Common;
 using DataAccess;
@@ -54,6 +56,23 @@ namespace LMS.Controllers.V1
             _StatusCode    = StatusCode.Value;
             _StatusMessage = StatusMessage.Value;
         }
+
+        [HttpGet]
+        [Route(template: "all/{id:int}", Name = "Chapter.All")]
+        [ServiceFilter(type: typeof(CheckTerm))]
+        public async Task<JsonResult> All(int id)
+        {
+            ChapterService<ChaptersViewModel, Chapter> ChapterService = _Provider.GetRequiredService< ChapterService<ChaptersViewModel , Chapter> >();
+            
+            List<Chapter> Chapters = await _UserManager.HasRoleAsync(Request.HttpContext, "Admin") ?
+                                     await ChapterService.FindAllEntityForTermWithNoTrackingAsync(id) :
+                                     await ChapterService.FindAllEntityForUserAndTermWithNoTrackingAsync(await _UserManager.GetCurrentUserAsync(Request.HttpContext), id);
+            
+            return JsonResponse.Return(_StatusCode.SuccessFetchData, _StatusMessage.SuccessFetchData, new
+            {
+                Chapters = Chapters.Select(Chapter => new { Id = Chapter.Id , Title = Chapter.Title })
+            });
+        }
         
         [HttpGet]
         [Route(template: "", Name = "Chapter.All.Paginate")]
@@ -61,20 +80,20 @@ namespace LMS.Controllers.V1
         {
             ChapterService<ChaptersViewModel, Chapter> ChapterService = _Provider.GetRequiredService< ChapterService<ChaptersViewModel , Chapter> >();
             
-            PaginatedList<ChaptersViewModel> Chapter = await _UserManager.HasRoleAsync(Request.HttpContext, "Admin") ? 
-                                                       await ChapterService.FindAllWithNoTrackingAndPaginateAsync(model.PageNumber, model.CountSizePerPage) : 
-                                                       await ChapterService.FindAllForUserWithNoTrackingAndPaginateAsync(await _UserManager.GetCurrentUserAsync(Request.HttpContext), model.PageNumber, model.CountSizePerPage);
+            PaginatedList<ChaptersViewModel> Chapters = await _UserManager.HasRoleAsync(Request.HttpContext, "Admin") ?
+                                                        await ChapterService.FindAllWithNoTrackingAndPaginateAsync(model.PageNumber, model.CountSizePerPage) : 
+                                                        await ChapterService.FindAllForUserWithNoTrackingAndPaginateAsync(await _UserManager.GetCurrentUserAsync(Request.HttpContext), model.PageNumber, model.CountSizePerPage);
 
             JsonResponse.Handle(Request.HttpContext, "X-Pagination", new
             {
-                Chapter.CurrentPage,
-                Chapter.CountSizePerPage,
-                Chapter.TotalPages,
-                Chapter.HasNext,
-                Chapter.HasPrev
+                Chapters.CurrentPage,
+                Chapters.CountSizePerPage,
+                Chapters.TotalPages,
+                Chapters.HasNext,
+                Chapters.HasPrev
             });
             
-            return JsonResponse.Return(_StatusCode.SuccessFetchData, _StatusMessage.SuccessFetchData, new { Chapter });
+            return JsonResponse.Return(_StatusCode.SuccessFetchData, _StatusMessage.SuccessFetchData, new { Chapters });
         }
 
         [HttpPut]

@@ -25,8 +25,14 @@ namespace DataAccess.ViewModels
         [IdentityPassword]
         public string Password { get; set; }
         
-        [Required(ErrorMessage = "فیلد شماره تماس ( تلفن همراه ) الزامی می باشد")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "فیلد شماره تماس ( تلفن همراه ) الزامی می باشد")]
         public string Phone { get; set; }
+        
+        [Required(AllowEmptyStrings = false, ErrorMessage = "فیلد توضیحات الزامی می باشد")]
+        public string Description { get; set; }
+        
+        [Required(AllowEmptyStrings = false, ErrorMessage = "فیلد تخصص الزامی می باشد")]
+        public string Expert { get; set; }
         
         [Required(AllowEmptyStrings = false, ErrorMessage = "فیلد پست الکترونیکی الزامی می باشد")]
         [DataType(DataType.EmailAddress, ErrorMessage = "فرمت پست الکترونیکی وارده صحیح نمی باشد")]

@@ -50,9 +50,9 @@ namespace Model
             
             /*-------------------------------------------------------*/
 
-            builder.HasOne(Tran => Tran.User).WithMany(User => User.Transactions).HasForeignKey(Tran => Tran.UserId);
+            builder.HasOne(Tran => Tran.User).WithMany(User => User.Transactions).HasForeignKey(Tran => Tran.UserId).OnDelete(DeleteBehavior.Cascade);
             
-            builder.HasOne(Tran => Tran.Term).WithMany(Term => Term.Transactions).HasForeignKey(Tran => Tran.TermId);
+            builder.HasOne(Tran => Tran.Term).WithMany(Term => Term.Transactions).HasForeignKey(Tran => Tran.TermId).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

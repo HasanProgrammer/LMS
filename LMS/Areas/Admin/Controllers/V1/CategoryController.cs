@@ -65,16 +65,6 @@ namespace LMS.Areas.Admin.Controllers.V1
         }
 
         [HttpGet]
-        [Route(template: "all", Name = "Admin.Category.All")]
-        public virtual async Task<JsonResult> All()
-        {
-            return JsonResponse.Return(_StatusCode.SuccessFetchData, _StatusMessage.SuccessFetchData, new
-            {
-                Categories = await _CategoryService.FindAllWithNoTrackingAsync()
-            });
-        }
-
-        [HttpGet]
         [Route(template: "", Name = "Admin.Category.All.Paginate")]
         public virtual async Task<JsonResult> Index([FromQuery] PaginateQueryViewModel model)
         {

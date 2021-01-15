@@ -107,6 +107,8 @@ namespace DataService.Entity.TermServices.V1
                 Id              = TermTarget.Id,
                 UserId          = TermTarget.UserId,
                 UserName        = TermTarget.User.UserName,
+                UserExpert      = TermTarget.User.Expert,
+                UserDescription = TermTarget.User.Description,
                 UserImage       = TermTarget.User.Image != null ? $"{ _Config.GetValue<string>("File:UploadPathImagePublic").Replace("\\", "/") }{ TermTarget.User.Image.Path }" : null,
                 Image           = $"{ _Config.GetValue<string>("File:UploadPathImagePublic").Replace("\\", "/") }{ TermTarget.Image.Path }",
                 CategoryId      = TermTarget.CategoryId,
@@ -201,6 +203,8 @@ namespace DataService.Entity.TermServices.V1
                     Id              = TermTarget.Id,
                     UserId          = TermTarget.UserId,
                     UserName        = TermTarget.User.UserName,
+                    UserExpert      = TermTarget.User.Expert, 
+                    UserDescription = TermTarget.User.Description, 
                     UserImage       = TermTarget.User.Image != null ? $"{ _Config.GetValue<string>("File:UploadPathImagePublic").Replace("\\", "/") }{ TermTarget.User.Image.Path }" : null,
                     Image           = $"{ _Config.GetValue<string>("File:UploadPathImagePublic").Replace("\\", "/") }{ TermTarget.Image.Path }",
                     CategoryId      = TermTarget.CategoryId,
@@ -323,7 +327,20 @@ namespace DataService.Entity.TermServices.V1
 
         public override Term FindWithIdEntityWithEagerLoadingAsNoTracking(int? id)
         {
-            return _Context.Terms.AsNoTracking().Include(Term => Term.Image).Include(Term => Term.User).FirstOrDefault(Term => Term.Id == id);
+            return _Context.Terms.AsNoTracking().Include(Term => Term.Image)
+                                                .Include(Term => Term.User)
+                                                .Include(Term => Term.Chapters)
+                                                .FirstOrDefault(Term => Term.Id == id);
+        }
+
+        public override Task<List<Term>> FindAllActiveEntityAsNoTrackingAsync()
+        {
+            return _Context.Terms.AsNoTracking().Where(Term => Term.Status == Model.Enums.Term.Status.Active).ToListAsync();
+        }
+        
+        public override Task<List<Term>> FindAllEntityForUserWithNoTrackingAndActiveAsync(User user)
+        {
+            return _Context.Terms.AsNoTracking().Where(Term => Term.UserId.Equals(user.Id) && Term.Status == Model.Enums.Term.Status.Active).ToListAsync();
         }
 
         public override Term FindWithNameEntityWithNoTracking(string name)
@@ -335,16 +352,16 @@ namespace DataService.Entity.TermServices.V1
         {
             IQueryable<Term> TermQuery = _Context.Terms.AsNoTracking();
             
-            int CountCSH       = await TermQuery.Where(Term => Term.Category.Name.Equals(csh))    .CountAsync();
-            int CountPHP       = await TermQuery.Where(Term => Term.Category.Name.Equals(php))    .CountAsync();
-            int CountPYT       = await TermQuery.Where(Term => Term.Category.Name.Equals(python)) .CountAsync();
-            int CountJS        = await TermQuery.Where(Term => Term.Category.Name.Equals(js))     .CountAsync();
-            int CountASP       = await TermQuery.Where(Term => Term.Category.Name.Equals(asp))    .CountAsync();
-            int CountLaravel   = await TermQuery.Where(Term => Term.Category.Name.Equals(laravel)).CountAsync();
-            int CountDjango    = await TermQuery.Where(Term => Term.Category.Name.Equals(django)) .CountAsync();
-            int CountReactJS   = await TermQuery.Where(Term => Term.Category.Name.Equals(reactjs)).CountAsync();
-            int CountSQLServer = await TermQuery.Where(Term => Term.Category.Name.Equals(sql))    .CountAsync();
-            int CountMySQL     = await TermQuery.Where(Term => Term.Category.Name.Equals(mysql))  .CountAsync();
+            int CountCSH       = await TermQuery.Where(Term => Term.Category.Name.Equals(csh)     && Term.Status == Model.Enums.Term.Status.Active).CountAsync();
+            int CountPHP       = await TermQuery.Where(Term => Term.Category.Name.Equals(php)     && Term.Status == Model.Enums.Term.Status.Active).CountAsync();
+            int CountPYT       = await TermQuery.Where(Term => Term.Category.Name.Equals(python)  && Term.Status == Model.Enums.Term.Status.Active).CountAsync();
+            int CountJS        = await TermQuery.Where(Term => Term.Category.Name.Equals(js)      && Term.Status == Model.Enums.Term.Status.Active).CountAsync();
+            int CountASP       = await TermQuery.Where(Term => Term.Category.Name.Equals(asp)     && Term.Status == Model.Enums.Term.Status.Active).CountAsync();
+            int CountLaravel   = await TermQuery.Where(Term => Term.Category.Name.Equals(laravel) && Term.Status == Model.Enums.Term.Status.Active).CountAsync();
+            int CountDjango    = await TermQuery.Where(Term => Term.Category.Name.Equals(django)  && Term.Status == Model.Enums.Term.Status.Active).CountAsync();
+            int CountReactJS   = await TermQuery.Where(Term => Term.Category.Name.Equals(reactjs) && Term.Status == Model.Enums.Term.Status.Active).CountAsync();
+            int CountSQLServer = await TermQuery.Where(Term => Term.Category.Name.Equals(sql)     && Term.Status == Model.Enums.Term.Status.Active).CountAsync();
+            int CountMySQL     = await TermQuery.Where(Term => Term.Category.Name.Equals(mysql)   && Term.Status == Model.Enums.Term.Status.Active).CountAsync();
             
             return (CountCSH, CountPHP, CountPYT, CountJS, CountASP, CountLaravel, CountDjango, CountReactJS, CountSQLServer, CountMySQL);
         }

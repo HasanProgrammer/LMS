@@ -53,6 +53,8 @@ namespace DataService.Entity.UserServices.V2
                                                Email       = User.Email,
                                                Image       = User.Image != null ? $"{ _Config.GetValue<string>("File:UploadPathImagePublic").Replace("\\", "/") }{ User.Image.Path }" : null,
                                                Phone       = User.Phone,
+                                               Description = User.Description,
+                                               Expert      = User.Expert, 
                                                StatusKey   = User.Status == Model.Enums.User.Status.Active ? 1 : 0,
                                                StatusValue = User.Status == Model.Enums.User.Status.Active ? "فعال" : "غیر فعال",
                                                

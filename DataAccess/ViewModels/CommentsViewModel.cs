@@ -14,8 +14,10 @@ namespace DataAccess.ViewModels
         
         /*-----------------------------------------------------------*/
         
+        public int? Id           { get; set; }
         public string Title      { get; set; }
         public string Content    { get; set; }
+        public int? CountAnswer  { get; set; }
         public bool Status       { get; set; }
         public string DateCreate { get; set; }
         

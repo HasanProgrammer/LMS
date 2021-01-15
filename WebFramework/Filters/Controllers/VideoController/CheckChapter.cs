@@ -53,7 +53,7 @@ namespace WebFramework.Filters.Controllers.VideoController
         {
             CreateVideoViewModel model = context.ActionArguments.Values.SingleOrDefault(Parameter => Parameter is CreateVideoViewModel) as CreateVideoViewModel; int? ChapterId = model.Chapter;
             
-            if(_TermService.FindWithIdEntityAsNoTracking(model.Term).HasChapter && ChapterId == null)
+            if((context.HttpContext.GetRouteData().Values["Term"] as Term).HasChapter && ChapterId == null)
             {
                 JsonResponse.Handle(context.HttpContext, _StatusCode.NotFound);
                 context.Result = new EmptyResult();

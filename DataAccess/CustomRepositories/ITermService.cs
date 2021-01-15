@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using DataAccess.CustomClasses;
 using Model;
 using Model.Bases;
@@ -23,6 +24,7 @@ namespace DataAccess.CustomRepositories
     /*Model*/
     public partial interface ITermService<TViewModel, TModel>
     {
+        public Task<List<TModel>> FindAllEntityForUserWithNoTrackingAndActiveAsync(User user);
         public TModel FindWithNameEntityWithNoTracking(string name);
         public Task<TModel> FindWithNameEntityWithNoTrackingAsync(string name);
         

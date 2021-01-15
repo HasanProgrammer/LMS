@@ -47,7 +47,7 @@ namespace WebFramework.Filters.Controllers.VideoController
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             //I
-            Term Term = _TermService.FindWithIdEntityAsNoTracking (
+            Term Term = _TermService.FindWithIdEntityWithEagerLoadingAsNoTracking (
                 (context.ActionArguments.Values.SingleOrDefault(Parameter => Parameter is CreateVideoViewModel) as CreateVideoViewModel).Term
             );
             

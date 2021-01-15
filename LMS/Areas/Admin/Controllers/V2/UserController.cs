@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Common;
 using DataAccess;
@@ -150,6 +151,38 @@ namespace LMS.Areas.Admin.Controllers.V2
                     return JsonResponse.Return(_StatusCode.SuccessEdit, _StatusMessage.SuccessEdit, new { });
                 return JsonResponse.Return(_StatusCode.ErrorEdit, _StatusMessage.ErrorEdit, new { });
             }
+            return JsonResponse.Return(_StatusCode.ErrorEdit, _StatusMessage.ErrorEdit, new { });
+        }
+
+        [HttpPatch]
+        [Route(template: "active/{id}", Name = "Admin.User.Active")]
+        [ServiceFilter(type: typeof(CheckUser))]
+        public async Task<JsonResult> Active(string id)
+        {
+            User User = Request.HttpContext.GetRouteData().Values["User"] as User;
+                
+            User.Status    = Model.Enums.User.Status.Active;
+            User.UpdatedAt = PersianDatetime.Now();
+
+            IdentityResult result = await _UserManager.UpdateAsync(User);
+            if(result.Succeeded)
+                return JsonResponse.Return(_StatusCode.SuccessEdit, _StatusMessage.SuccessEdit, new { });
+            return JsonResponse.Return(_StatusCode.ErrorEdit, _StatusMessage.ErrorEdit, new { });
+        }
+        
+        [HttpPatch]
+        [Route(template: "inactive/{id}", Name = "Admin.User.InActive")]
+        [ServiceFilter(type: typeof(CheckUser))]
+        public async Task<JsonResult> InActive(string id)
+        {
+            User User = Request.HttpContext.GetRouteData().Values["User"] as User;
+                
+            User.Status    = Model.Enums.User.Status.Inactive;
+            User.UpdatedAt = PersianDatetime.Now();
+            
+            IdentityResult result = await _UserManager.UpdateAsync(User);
+            if(result.Succeeded)
+                return JsonResponse.Return(_StatusCode.SuccessEdit, _StatusMessage.SuccessEdit, new { });
             return JsonResponse.Return(_StatusCode.ErrorEdit, _StatusMessage.ErrorEdit, new { });
         }
     }

@@ -5,9 +5,11 @@ namespace DataAccess.ViewModels
 {
     public partial class TermsViewModel : IViewEntity /* Version-I */
     {
-        public string UserId    { get; set; }
-        public string UserName  { get; set; }
-        public string UserImage { get; set; }
+        public string UserId          { get; set; }
+        public string UserName        { get; set; }
+        public string UserExpert      { get; set; }
+        public string UserDescription { get; set; }
+        public string UserImage       { get; set; }
         
         /*-----------------------------------------------------------*/
         

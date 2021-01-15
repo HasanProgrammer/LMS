@@ -40,13 +40,22 @@ namespace WebFramework.Filters.Controllers.VideoController
 
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            if (!_UserManager.HasRole(context.HttpContext, "Admin"))
-            {
-                //I
-                Chapter Chapter = context.HttpContext.GetRouteData().Values["Chapter"] as Chapter;
+            //I
+            Chapter Chapter = context.HttpContext.GetRouteData().Values["Chapter"] as Chapter;
 
-                //II
-                if (Chapter != null)
+            //II
+            if (Chapter != null)
+            {
+                /*در این قسمت بررسی می گردد که فصل انتخاب شده از فصول دوره ی انتخاب شده است یا خیر | اگر خیر؛ پس این فیلم نمی تواند منتشر شود*/
+                /*باید فصل انتخابی مربوط به فصول دوره ی انتخابی باشد*/
+                if ((context.HttpContext.GetRouteData().Values["Term"] as Term).Chapters.SingleOrDefault(Item => Item.Id == Chapter.Id) == null)
+                {
+                    JsonResponse.Handle(context.HttpContext, _StatusCode.NotFound);
+                    context.Result = new EmptyResult();
+                    context.Result = JsonResponse.Return(_StatusCode.NotFound, "فصل انتخابی باید از بین فصول دوره ی انتخابی باشد", new {});
+                }
+                
+                if (!_UserManager.HasRole(context.HttpContext, "Admin"))
                 {
                     if (!_UserManager.GetCurrentUser(context.HttpContext).Id.Equals(Chapter.UserId))
                     {

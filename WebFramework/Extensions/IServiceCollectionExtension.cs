@@ -5,6 +5,7 @@ using Common;
 using DataAccess;
 using DataAccess.CustomRepositories;
 using DataAccess.ViewModels;
+using DataService.Entity.AnswerServices.V1;
 using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -15,8 +16,10 @@ using Microsoft.IdentityModel.Tokens;
 using Model;
 using DataService.Entity.CategoryServices.V1;
 using DataService.Entity.ChapterServices.V1;
+using DataService.Entity.QuestionServices.V1;
 using DataService.Entity.RoleServices.V1;
 using DataService.Entity.TermServices.V1;
+using DataService.Entity.TransactionService.V1;
 using DataService.Entity.UserServices.V2;
 using DataService.Entity.VideoServices.V1;
 using DataService.Web.Mail;
@@ -57,6 +60,18 @@ namespace WebFramework.Extensions
             //Video's DataService
             service.AddScoped<VideoService<VideosViewModel, Video>, VideoService>();
             //Video's DataService
+            
+            //Question's DataService
+            service.AddScoped<QuestionService<CommentsViewModel, Comment>, QuestionService>();
+            //Question's DataService
+            
+            //Answer's DataService
+            service.AddScoped<AnswerService<AnswersViewModel, Answer>, AnswerService>();
+            //Answer's DataService
+            
+            //Transaction's DataService
+            service.AddScoped<TransactionService<TransactionsViewModel, Transaction>, TransactionService>();
+            //Transaction's DataService
             
             //Other's DataService
             service.AddScoped<IMailSender, EmailSender>();
@@ -118,6 +133,18 @@ namespace WebFramework.Extensions
             service.AddScoped<Filters.Controllers.VideoController.VideoPolicy>();
             service.AddScoped<Filters.Controllers.VideoController.VideoUploader>();
             //Video's Controller
+            
+            //Question's Controller
+            service.AddScoped<Filters.Controllers.QuestionController.CheckQuestion>();
+            service.AddScoped<Filters.Controllers.QuestionController.QuestionPolicy>();
+            //Question's Controller
+            
+            //Answer's Controller
+            service.AddScoped<Filters.Controllers.AnswerController.AnswerPolicy>();
+            service.AddScoped<Filters.Controllers.AnswerController.CheckAnswer>();
+            service.AddScoped<Filters.Controllers.AnswerController.CheckQuestion>();
+            service.AddScoped<Filters.Controllers.AnswerController.QuestionPolicy>();
+            //Answer's Controller
             
             //Home's Controller
             service.AddScoped<Filters.Controllers.HomeController.CheckCategory>();
@@ -226,7 +253,9 @@ namespace WebFramework.Extensions
                            .WithOrigins("http://localhost:3001")
                            .AllowAnyHeader()
                            .AllowAnyMethod()
-                           .WithExposedHeaders("X-Pagination"); /*این یک Header شخصی است که برای ارسال داده ها به شکل صفحه بندی شده مورد استفاده قرار می گیرد*/
+                           /*.WithExposedHeaders("Content-Disposition")*/ /*این یک Header استاندارد است که برای دانلود فایل مورد استفاده قرار میگیرد*/
+                           .WithExposedHeaders("X-Video-Name")            /*این یک Header شخصی است که برای ارسال نام فایلی که قرار است دانلود گردد مورد استفاده قرار می گیرد*/
+                           .WithExposedHeaders("X-Pagination");           /*این یک Header شخصی است که برای ارسال داده ها به شکل صفحه بندی شده مورد استفاده قرار می گیرد*/
                 });
             });
             

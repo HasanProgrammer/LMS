@@ -124,10 +124,11 @@ namespace LMS.Controllers.V1
         {
             Video Video = Request.HttpContext.GetRouteData().Values["Video"] as Video;
 
-            Video.TermId   = model.Term;
-            Video.Title    = model.Title;
-            Video.Duration = model.Duration;
-            Video.IsFree   = Convert.ToBoolean(model.IsFree);
+            Video.TermId    = model.Term;
+            Video.ChapterId = model.Chapter;
+            Video.Title     = model.Title;
+            Video.Duration  = model.Duration;
+            Video.IsFree    = Convert.ToBoolean(model.IsFree);
 
             if (video != null) Video.VideoFile = Request.HttpContext.GetRouteData().Values["VideoPath"] as string;
 

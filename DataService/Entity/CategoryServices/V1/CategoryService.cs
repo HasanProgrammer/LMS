@@ -29,7 +29,7 @@ namespace DataService.Entity.CategoryServices.V1
     {
         public override async Task<List<CategoriesViewModel>> FindAllWithNoTrackingAsync()
         {
-            return await _Context.Categories.AsNoTracking().OrderByDescending(category => category.Id).Select(category => new CategoriesViewModel
+            return await _Context.Categories.AsNoTracking().Select(category => new CategoriesViewModel
             {
                 Id   = category.Id,
                 Name = category.Name
@@ -52,6 +52,11 @@ namespace DataService.Entity.CategoryServices.V1
         public override Category FindWithIdEntity(int? id)
         {
             return _Context.Categories.Find(id);
+        }
+
+        public override Category FindWithIdEntityWithEagerLoadingAsNoTracking(int? id)
+        {
+            return _Context.Categories.AsNoTracking().Include(Category => Category.Terms).FirstOrDefault(Category => Category.Id == id);
         }
 
         public override Category FindWithIdEntityAsNoTracking(int? id)
