@@ -19,6 +19,8 @@ namespace Model
         public int? Price         { get; set; }
         public bool HasChapter    { get; set; } = false;
         public Status Status      { get; set; }
+        public string DateStart   { get; set; } /*تاریخ شروع دوره برنامه نویسی*/
+        public string DateEnd     { get; set; } /*تاریخ پایان دوره برنامه نویسی*/
     }
 
     public partial class Term
@@ -59,6 +61,7 @@ namespace Model
             builder.Property(Term => Term.Result)     .IsRequired();
             builder.Property(Term => Term.Price)      .IsRequired();
             builder.Property(Term => Term.Status)     .IsRequired().HasConversion(new EnumToNumberConverter<Status, int>());
+            builder.Property(Term => Term.DateStart)  .IsRequired();
             builder.Property(Term => Term.CreatedAt)  .IsRequired();
             builder.Property(Term => Term.UpdatedAt)  .IsRequired();
             

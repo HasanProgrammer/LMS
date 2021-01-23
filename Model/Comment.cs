@@ -12,6 +12,7 @@ namespace Model
         public string Title   { get; set; }
         public string Content { get; set; }
         public bool Show      { get; set; } = false;
+        public bool HasAnswer { get; set; } = false;
     }
     
     public partial class Comment

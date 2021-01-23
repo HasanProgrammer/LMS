@@ -26,11 +26,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Model;
 using WebFramework.Extensions;
+using WebFramework.Filters;
 using WebFramework.Filters.Controllers.HomeController;
 using ZarinPal.Class;
 using ZarinpalSandbox;
 using ZarinpalSandbox.Models;
 using Payment = ZarinPal.Class.Payment;
+using String = Common.String;
 
 namespace LMS.Controllers.V1
 {
@@ -84,6 +86,58 @@ namespace LMS.Controllers.V1
             
             //Mail
             _EmailSender = MailSender;
+        }
+
+        [HttpGet]
+        [Route(template: "terms/last", Name = "Home.Terms.Last")]
+        public async Task<JsonResult> LastAllTerm()
+        {
+            string CSH        = _Config.GetValue<string>("Category:C#");
+            string PHP        = _Config.GetValue<string>("Category:PHP");
+            string Python     = _Config.GetValue<string>("Category:Python");
+            string JavaScript = _Config.GetValue<string>("Category:JavaScript");
+            string ASPCore    = _Config.GetValue<string>("Category:ASPCore");
+            string Laravel    = _Config.GetValue<string>("Category:Laravel");
+            string Django     = _Config.GetValue<string>("Category:Django");
+            string ReactJS    = _Config.GetValue<string>("Category:ReactJS");
+            string SQLServer  = _Config.GetValue<string>("Category:SQLServer");
+            string MySQL      = _Config.GetValue<string>("Category:MySQL");
+            
+            return JsonResponse.Return(_StatusCode.SuccessFetchData, _StatusMessage.SuccessFetchData, new
+            {
+                Terms      = await _TermService.FindAllLastPublishWithNoTrackingAndActiveAsync(6),
+                CSH        = await _TermService.FindAllLastPublishWithNoTrackingAndActiveForCategoryAsync(CSH        , 6),
+                PHP        = await _TermService.FindAllLastPublishWithNoTrackingAndActiveForCategoryAsync(PHP        , 6),
+                Python     = await _TermService.FindAllLastPublishWithNoTrackingAndActiveForCategoryAsync(Python     , 6),
+                JavaScript = await _TermService.FindAllLastPublishWithNoTrackingAndActiveForCategoryAsync(JavaScript , 6),
+                ASPCore    = await _TermService.FindAllLastPublishWithNoTrackingAndActiveForCategoryAsync(ASPCore    , 6),
+                Laravel    = await _TermService.FindAllLastPublishWithNoTrackingAndActiveForCategoryAsync(Laravel    , 6),
+                Django     = await _TermService.FindAllLastPublishWithNoTrackingAndActiveForCategoryAsync(Django     , 6),
+                ReactJS    = await _TermService.FindAllLastPublishWithNoTrackingAndActiveForCategoryAsync(ReactJS    , 6),
+                SQLServer  = await _TermService.FindAllLastPublishWithNoTrackingAndActiveForCategoryAsync(SQLServer  , 6),
+                MySQL      = await _TermService.FindAllLastPublishWithNoTrackingAndActiveForCategoryAsync(MySQL      , 6)
+            });
+        }
+
+        [HttpGet]
+        [Route(template: "search/{title}", Name = "Home.Search")]
+        public async Task<JsonResult> Search(string title)
+        {
+            return JsonResponse.Return(_StatusCode.SuccessFetchData, _StatusMessage.SuccessFetchData, new
+            {
+                Terms = await _TermService.FindAllByTitleWithNoTrackingAndActiveAsync(String.Sanitize(title))
+            });
+        }
+
+        [HttpGet]
+        [Route(template: "search/category/{name}/{title}", Name = "Home.Search.Category")]
+        [ServiceFilter(type: typeof(CheckCategory))]
+        public async Task<JsonResult> SearchForCategory(string name, string title)
+        {
+            return JsonResponse.Return(_StatusCode.SuccessFetchData, _StatusMessage.SuccessFetchData, new
+            {
+                Terms = await _TermService.FindAllByTitleForCategoryWithNoTrackingAndActiveAsync(Request.HttpContext.GetRouteData().Values["Category"] as string, String.Sanitize(title))
+            });
         }
         
         [HttpGet]
@@ -192,6 +246,41 @@ namespace LMS.Controllers.V1
         }
 
         [HttpGet]
+        [Route(template: "term/owned")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<JsonResult> ShowOwnedTerms()
+        {
+            return JsonResponse.Return(_StatusCode.SuccessFetchData, _StatusMessage.SuccessFetchData, new
+            {
+                Terms = await _TermService.FindAllOwnedWithNoTrackingAsync(await _Provider.GetRequiredService<UserManager<User>>().GetCurrentUserAsync(Request.HttpContext))
+            });
+        }
+
+        [HttpPut]
+        [Route(template: "question/register/{id:int}", Name = "Home.Term.Question.Register")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [ServiceFilter(type: typeof(CheckTerm))]
+        [ServiceFilter(type: typeof(ModelValidation))]
+        public async Task<JsonResult> RegisterQuestion(int id, CreateQuestionViewModel model)
+        {
+            Comment Comment = new Comment
+            {
+                TermId    = id,
+                UserId    = (await _Provider.GetRequiredService<UserManager<User>>().GetCurrentUserAsync(Request.HttpContext)).Id,
+                Title     = String.Sanitize(model.Title),
+                Content   = String.Sanitize(model.Content),
+                CreatedAt = PersianDatetime.Now(),
+                UpdatedAt = PersianDatetime.Now()
+            };
+
+            await _Context.Comments.AddAsync(Comment);
+
+            if (Convert.ToBoolean(await _Context.SaveChangesAsync()))
+                return JsonResponse.Return(_StatusCode.SuccessCreate, _StatusMessage.SuccessCreate, new { });
+            return JsonResponse.Return(_StatusCode.ErrorCreate, _StatusMessage.ErrorCreate, new { });
+        }
+
+        [HttpGet]
         [Route(template: "video/public/download/{id:int}", Name = "Home.Term.Video.Public.Download")]
         [ServiceFilter(type: typeof(CheckVideo))]
         [ServiceFilter(type: typeof(VideoPolicy))]
@@ -254,7 +343,7 @@ namespace LMS.Controllers.V1
         /*در این متد ، نتیجه خرید کاربر از طرف زرین پال دریافت میشود که آیا پرداخت موفق بوده یا خیر*/ 
         [HttpGet]
         [Route(template: "purchase/verification", Name = "Home.Term.Purchase.Verification")]
-        public async Task<JsonResult> VerificationPurchase()
+        public async Task<IActionResult> VerificationPurchase()
         {
             if
             (
@@ -275,7 +364,7 @@ namespace LMS.Controllers.V1
                     Authority  = Request.Query["Authority"],
                     MerchantId = _ZarinPal.MerchantID
                 }, Payment.Mode.sandbox);
-                
+
                 /*-----------------------------------------------*/
                 
                 if (Result.Status == 100) /*تراکنش درست و مطابق همان مبلغی بوده است که مورد انتظار ما است*/
@@ -324,20 +413,26 @@ namespace LMS.Controllers.V1
                     }
 
                     /*-----------------------------------------------*/
-                    
-                    return JsonResponse.Return(_StatusCode.SuccessPayment, _StatusMessage.SuccessPayment, new 
-                    {
-                        RefTransaction = Result.RefId
-                    });
+
+                    ViewBag.msg  = _StatusMessage.SuccessPayment;
+                    ViewBag.code = _StatusCode.SuccessPayment;
+                    ViewBag.body = String.EnNumberToPersian(Result.RefId.ToString());
+                    return View();
                 }
                 
                 /*-----------------------------------------------*/
                 
                 /*در این مرحله پرداخت مطابغ مبلغ مورد انتظار ما نبوده است یا خطایی مشابه رخ داده است*/
-                return JsonResponse.Return(_StatusCode.ErrorPayment, _StatusMessage.ErrorPayment, new {});
+                ViewBag.msg  = String.EnNumberToPersian(_StatusMessage.ErrorPayment);
+                ViewBag.code = _StatusCode.ErrorPayment;
+                ViewBag.body = String.EnNumberToPersian(Result.RefId.ToString());
+                return View();
             }
 
-            return JsonResponse.Return(_StatusCode.ErrorPayment, _StatusMessage.ErrorPayment, new {});
+            ViewBag.msg  = String.EnNumberToPersian(_StatusMessage.ErrorPayment);
+            ViewBag.code = _StatusCode.ErrorPayment;
+            ViewBag.body = null;
+            return View();
         }
     }
 }

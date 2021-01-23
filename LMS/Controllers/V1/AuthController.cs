@@ -68,13 +68,22 @@ namespace LMS.Controllers.V1
                 string PhoneCode = $"PhoneVerifyCode: { Request.HttpContext.GetRouteData().Values["PhoneCode"] }";
                 
                 await _Mail.SendAsync(new List<string>{ model.Email }, "EmailVerifyCode", EmailCode);
-                
-                KavenegarApi sms = new KavenegarApi(_Config.GetValue<string>("SMS:Key"));
-                sms.Send (
-                    _Config.GetValue<string>("SMS:Sender"),
-                    model.Phone,
-                    PhoneCode
-                );
+
+                try
+                {
+                    KavenegarApi sms = new KavenegarApi(_Config.GetValue<string>("SMS:Key"));
+                    sms.Send (
+                        _Config.GetValue<string>("SMS:Sender"),
+                        model.Phone,
+                        PhoneCode
+                    );
+                }
+                catch (Exception e)
+                {
+                    /*در این قسمت باید علت ارسال نشدن پیامک را به مدیر سیستم به روشی معین گزارش داد*/
+                    await _Mail.SendAsync(new List<string>{ _Config.GetValue<string>("AdminData:Email") }, "ErrorSendSMS", e.Message);
+                    return JsonResponse.Return(_StatusCode.ErrorCreate, "متاسفانه سامانه ارسال پیامک دچار مشکل شده است و سیستم قادر به ارسال کد اعتبارسنجی به شماره تماس شما نمی باشد . این مشکل در اسرع وقت برطرف خواهد شد", new { });
+                }
                 
                 return JsonResponse.Return(_StatusCode.SuccessRegister, _StatusMessage.SuccessRegister, new { });
             }

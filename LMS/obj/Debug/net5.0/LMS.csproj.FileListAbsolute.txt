@@ -108,3 +108,16 @@ C:\Users\Programmer\Desktop\ASP Projects\LMS\LMS\obj\Debug\net5.0\LMS.dll
 C:\Users\Programmer\Desktop\ASP Projects\LMS\LMS\obj\Debug\net5.0\ref\LMS.dll
 C:\Users\Programmer\Desktop\ASP Projects\LMS\LMS\obj\Debug\net5.0\LMS.pdb
 C:\Users\Programmer\Desktop\ASP Projects\LMS\LMS\obj\Debug\net5.0\LMS.genruntimeconfig.cache
+C:\Users\Programmer\Desktop\ASP Projects\LMS\LMS\bin\Debug\net5.0\AngleSharp.dll
+C:\Users\Programmer\Desktop\ASP Projects\LMS\LMS\bin\Debug\net5.0\AngleSharp.Css.dll
+C:\Users\Programmer\Desktop\ASP Projects\LMS\LMS\bin\Debug\net5.0\HtmlSanitizer.dll
+C:\Users\Programmer\Desktop\ASP Projects\LMS\LMS\obj\Debug\net5.0\LMS.RazorAssemblyInfo.cache
+C:\Users\Programmer\Desktop\ASP Projects\LMS\LMS\obj\Debug\net5.0\LMS.RazorAssemblyInfo.cs
+C:\Users\Programmer\Desktop\ASP Projects\LMS\LMS\obj\Debug\net5.0\LMS.TagHelpers.input.cache
+C:\Users\Programmer\Desktop\ASP Projects\LMS\LMS\obj\Debug\net5.0\LMS.TagHelpers.output.cache
+C:\Users\Programmer\Desktop\ASP Projects\LMS\LMS\obj\Debug\net5.0\LMS.RazorCoreGenerate.cache
+C:\Users\Programmer\Desktop\ASP Projects\LMS\LMS\obj\Debug\net5.0\LMS.RazorTargetAssemblyInfo.cs
+C:\Users\Programmer\Desktop\ASP Projects\LMS\LMS\bin\Debug\net5.0\LMS.Views.dll
+C:\Users\Programmer\Desktop\ASP Projects\LMS\LMS\bin\Debug\net5.0\LMS.Views.pdb
+C:\Users\Programmer\Desktop\ASP Projects\LMS\LMS\obj\Debug\net5.0\LMS.Views.pdb
+C:\Users\Programmer\Desktop\ASP Projects\LMS\LMS\obj\Debug\net5.0\Razor\Views\Home\VerificationPurchase.cshtml.g.cs

@@ -134,10 +134,12 @@ namespace LMS.Areas.Admin.Controllers.V2
             
             //III
             if(newImage != null) user.ImageId = newImage.Id;
-            user.UserName  = model.Username;
-            user.Phone     = model.Phone;
-            user.Email     = model.Email;
-            user.UpdatedAt = PersianDatetime.Now();
+            user.UserName    = model.Username;
+            user.Phone       = model.Phone;
+            user.Email       = model.Email;
+            user.Description = model.Description;
+            user.Expert      = model.Expert;
+            user.UpdatedAt   = PersianDatetime.Now();
             
             //IV
             if(model.Password != null) await _UserManager.ResetPasswordAsync(user, await _UserManager.GeneratePasswordResetTokenAsync(user), model.Password);

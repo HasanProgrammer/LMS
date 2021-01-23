@@ -55,6 +55,10 @@
               "target": "Package",
               "version": "[1.7.18, )"
             },
+            "HtmlSanitizer": {
+              "target": "Package",
+              "version": "[5.0.376, )"
+            },
             "Kavenegar": {
               "target": "Package",
               "version": "[1.2.4, )"

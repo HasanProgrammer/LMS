@@ -114,7 +114,9 @@ namespace LMS.Controllers.V1
                 Result      = model.Result,
                 Price       = model.Price,
                 HasChapter  = Convert.ToBoolean(model.HasChapter),
-                Status      = Model.Enums.Term.Status.Inactive, 
+                Status      = Model.Enums.Term.Status.Inactive,
+                DateStart   = model.DateStart,
+                DateEnd     = model.DateEnd,
                 CreatedAt   = PersianDatetime.Now(),
                 UpdatedAt   = PersianDatetime.Now()
             };
@@ -156,6 +158,8 @@ namespace LMS.Controllers.V1
             Term.Result      = model.Result;
             Term.Price       = model.Price;
             Term.HasChapter  = Convert.ToBoolean(model.HasChapter);
+            Term.DateStart   = model.DateStart;
+            Term.DateEnd     = model.DateEnd;
             Term.UpdatedAt   = PersianDatetime.Now();
 
             _Context.Terms.Update(Term);

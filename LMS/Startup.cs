@@ -24,7 +24,8 @@ namespace LMS
         
         public void ConfigureServices(IServiceCollection services) /*DataService Container*/
         {
-            services.AddControllers();
+            services.AddControllersWithViews();
+            services.AddMvc();
             
             /*-------------------------------------------------------*/
             
@@ -35,7 +36,7 @@ namespace LMS
             services.AddAllServiceContainers(Configuration);
             services.AddJWTContainer(Configuration);
             services.AddConfigurationsContainer(Configuration);
-            services.AddCorsContainer();
+            services.AddCorsContainer(Configuration);
             services.AddTaskSchedulingContainer(Configuration);
             services.AddPureApiVersion();
             services.AddSessionContainer(Configuration);
@@ -103,7 +104,7 @@ namespace LMS
             });
 
             /*-------------------------------------------------------*/
-            
+
             jobs.UseBackgroundTasks(provider);
             manager.UseBackgroundTasks(provider);
         }

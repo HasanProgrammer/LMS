@@ -250,6 +250,9 @@ namespace DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("HasAnswer")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("Show")
                         .HasColumnType("bit");
 
@@ -350,6 +353,13 @@ namespace DataAccess.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedAt")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DateEnd")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DateStart")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

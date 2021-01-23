@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Common;
 using DataAccess;
@@ -31,12 +32,16 @@ namespace LMS.Controllers.V1
         //Context
         private readonly DatabaseContext _Context;
         
+        //WebServer
+        private readonly IMailSender _MailSender;
+        
         public AnswerController (
             AnswerService<AnswersViewModel, Answer> AnswerService,
             DatabaseContext             Context,
             IServiceProvider            Provider,
             IOptions<Config.StatusCode> StatusCode,
-            IOptions<Config.Messages>   StatusMessage
+            IOptions<Config.Messages>   StatusMessage,
+            IMailSender                 MailServer
         )
         {
             //Services
@@ -49,6 +54,9 @@ namespace LMS.Controllers.V1
             
             //Context
             _Context = Context;
+            
+            //WebServer
+            _MailSender = MailServer;
         }
 
         [HttpGet]
@@ -82,6 +90,8 @@ namespace LMS.Controllers.V1
         [ServiceFilter(type: typeof(ModelValidation))]
         public async Task<JsonResult> Answer(int id, CreateAnswerViewModel model)
         {
+            Comment Comment = Request.HttpContext.GetRouteData().Values["Comment"] as Comment;
+            
             Answer Answer = new Answer
             {
                 UserId    = (await _Provider.GetRequiredService< UserManager<User> >().GetCurrentUserAsync(Request.HttpContext)).Id,
@@ -93,8 +103,15 @@ namespace LMS.Controllers.V1
             };
 
             await _Context.Answers.AddAsync(Answer);
-            if(Convert.ToBoolean(await _Context.SaveChangesAsync()))
+            if (Convert.ToBoolean(await _Context.SaveChangesAsync()))
+            {
+                await _MailSender.SendAsync (
+                    new List<string> { Comment.User.Email },
+                    Comment.Content,
+                    model.Content
+                );
                 return JsonResponse.Return(_StatusCode.SuccessCreate, _StatusMessage.SuccessCreate, new { });
+            }
             return JsonResponse.Return(_StatusCode.ErrorCreate, _StatusMessage.ErrorCreate, new { });
         }
         

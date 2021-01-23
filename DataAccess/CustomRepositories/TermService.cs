@@ -153,6 +153,31 @@ namespace DataAccess.CustomRepositories
         {
             throw new System.NotImplementedException();
         }
+
+        public virtual Task<List<TViewModel>> FindAllLastPublishWithNoTrackingAndActiveAsync(int count)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public virtual Task<List<TViewModel>> FindAllLastPublishWithNoTrackingAndActiveForCategoryAsync(string categoey, int count)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public virtual Task<List<TViewModel>> FindAllByTitleWithNoTrackingAndActiveAsync(string title)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public virtual Task<List<TViewModel>> FindAllByTitleForCategoryWithNoTrackingAndActiveAsync(string category, string title)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public virtual Task<List<TViewModel>> FindAllOwnedWithNoTrackingAsync(User user)
+        {
+            throw new System.NotImplementedException();
+        }
     }
     
     /*Model*/

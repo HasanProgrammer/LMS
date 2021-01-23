@@ -19,6 +19,11 @@ namespace DataAccess.CustomRepositories
         public Task<TViewModel> FindWithIdAsNoTrackingAndActiveAsync(int id, User user);
         public Task<PaginatedList<TViewModel>> FindAllForUserWithNoTrackingAndPaginateAsync(User user, int page, int count);
         public Task<PaginatedList<TViewModel>> FindAllWithNoTrackingAndActiveForCategoryAndPaginateAsync(string category, int page, int count);
+        public Task<List<TViewModel>> FindAllLastPublishWithNoTrackingAndActiveAsync(int count);
+        public Task<List<TViewModel>> FindAllLastPublishWithNoTrackingAndActiveForCategoryAsync(string categoey, int count);
+        public Task<List<TViewModel>> FindAllByTitleWithNoTrackingAndActiveAsync(string title);
+        public Task<List<TViewModel>> FindAllByTitleForCategoryWithNoTrackingAndActiveAsync(string category, string title);
+        public Task<List<TViewModel>> FindAllOwnedWithNoTrackingAsync(User user);
     }
     
     /*Model*/

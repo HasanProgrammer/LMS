@@ -53,6 +53,8 @@ namespace WebFramework.Filters.Controllers.AuthController
                 EmailCode          = EmailCode,
                 PhoneCode          = PhoneCode,
                 Status             = Model.Enums.User.Status.Active,
+                Description        = "غیر ضروری",
+                Expert             = "غیر ضروری", 
                 CreatedAtTimeStamp = Time.TimeStampNow(),
                 CreatedAt          = PersianDatetime.Now(),
                 UpdatedAt          = PersianDatetime.Now()

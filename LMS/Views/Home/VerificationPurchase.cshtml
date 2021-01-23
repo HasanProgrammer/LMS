@@ -1,0 +1,21 @@
+﻿<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>@ViewBag.code</title>
+        <link rel="stylesheet" href="~/VerifyPurchase.css">
+    </head>
+    <body>
+        @{ var code = ViewBag.code == 200 ? "Success" : "Error"; }
+        <div class="ResultMSG @code">
+            <br>
+            <span id="msg">&nbsp; @ViewBag.msg &nbsp;</span>
+            @if (ViewBag.body != null)
+            {
+                <br><span id="tran">&nbsp; شماره تراکنش شما : @ViewBag.body &nbsp;</span>
+            }
+            <span id="timer"></span>
+        </div>
+        <script src="~/Timer.js"></script>
+    </body>
+</html>

@@ -2,6 +2,16 @@
 
 namespace Common
 {
+    public partial class Config /*ClientURL*/
+    {
+        public class ClientURL
+        {
+            public string HomeSite   { get; set; }
+            public string AdminPanel { get; set; }
+            public string UserPanel  { get; set; }
+        }
+    }
+
     public partial class Config /*AdminData*/
     {
         public class AdminData

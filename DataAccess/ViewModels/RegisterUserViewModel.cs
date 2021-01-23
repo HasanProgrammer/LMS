@@ -19,6 +19,7 @@ namespace DataAccess.ViewModels
         [MinLength(5, ErrorMessage = "فیلد نام کاربری نباید از 5 کاراکتر کمتر باشد")]
         [DataType(DataType.Text, ErrorMessage = "فرمت نام کاربری وارده صحیح نمی باشد")]
         [UniqueUsernameUser(ErrorMessage = "فیلد نام کاربری مورد نظر قبلا انتخاب شده است")]
+        [RegularExpression(@"\b[^\d\W]+\b", ErrorMessage = "فرمت نام کاربری وارده صحیح نمی باشد . نام کاربری باید تنها از حروف انگلیسی تشکیل شده باشد")]
         public string Username { get; set; }
         
         [Required(AllowEmptyStrings = false, ErrorMessage = "فیلد رمز عبور الزامی می باشد")]

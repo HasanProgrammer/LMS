@@ -243,14 +243,14 @@ namespace WebFramework.Extensions
             return service;
         }
         
-        public static IServiceCollection AddCorsContainer(this IServiceCollection service)
+        public static IServiceCollection AddCorsContainer(this IServiceCollection service, IConfiguration configuration)
         {
             service.AddCors(Option =>
             {
                 Option.AddPolicy("CORS", Builder =>
                 {
-                    Builder.WithOrigins("http://localhost:3000")
-                           .WithOrigins("http://localhost:3001")
+                    Builder.WithOrigins(configuration.GetValue<string>("ClientURL:HomeSite"))
+                           .WithOrigins(configuration.GetValue<string>("ClientURL:AdminPanel"))
                            .AllowAnyHeader()
                            .AllowAnyMethod()
                            /*.WithExposedHeaders("Content-Disposition")*/ /*این یک Header استاندارد است که برای دانلود فایل مورد استفاده قرار میگیرد*/
@@ -283,6 +283,7 @@ namespace WebFramework.Extensions
                    .Configure<Config.File>      (config: configuration.GetSection("File"))
                    .Configure<Config.ZarinPal>  (config: configuration.GetSection("ZarinPal"))
                    .Configure<Config.AdminData> (config: configuration.GetSection("AdminData"))
+                   .Configure<Config.ClientURL> (config: configuration.GetSection("ClientURL"))
                    .Configure<Config.Mail>      (config: configuration.GetSection("SMTP"));
             
             return service;

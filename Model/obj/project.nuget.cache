@@ -1,12 +1,15 @@
 {
   "version": 2,
-  "dgSpecHash": "sKusX5VXUWNkSJ1YkiPolb/stsbwCbreHjiVahlfXN7ErW3XxWIB0+4+1850q2E2t+CjFXhSM78f1+Kb16Ud7w==",
+  "dgSpecHash": "aA+SoeJGa/lHhQ+SJv+i7KToB9v4Tz4kNJz79Hu/njXLS9G7ewgKy9qi8RcjnEFyQCaSVM+X2mWeoeUb6r0gcA==",
   "success": true,
   "projectFilePath": "C:\\Users\\Programmer\\Desktop\\ASP Projects\\LMS\\Model\\Model.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\Programmer\\.nuget\\packages\\anglesharp\\0.14.0\\anglesharp.0.14.0.nupkg.sha512",
+    "C:\\Users\\Programmer\\.nuget\\packages\\anglesharp.css\\0.14.2\\anglesharp.css.0.14.2.nupkg.sha512",
     "C:\\Users\\Programmer\\.nuget\\packages\\hangfire.aspnetcore\\1.7.18\\hangfire.aspnetcore.1.7.18.nupkg.sha512",
     "C:\\Users\\Programmer\\.nuget\\packages\\hangfire.core\\1.7.18\\hangfire.core.1.7.18.nupkg.sha512",
     "C:\\Users\\Programmer\\.nuget\\packages\\hangfire.sqlserver\\1.7.18\\hangfire.sqlserver.1.7.18.nupkg.sha512",
+    "C:\\Users\\Programmer\\.nuget\\packages\\htmlsanitizer\\5.0.376\\htmlsanitizer.5.0.376.nupkg.sha512",
     "C:\\Users\\Programmer\\.nuget\\packages\\kavenegar\\1.2.4\\kavenegar.1.2.4.nupkg.sha512",
     "C:\\Users\\Programmer\\.nuget\\packages\\libuv\\1.9.1\\libuv.1.9.1.nupkg.sha512",
     "C:\\Users\\Programmer\\.nuget\\packages\\mailkit\\2.10.0\\mailkit.2.10.0.nupkg.sha512",

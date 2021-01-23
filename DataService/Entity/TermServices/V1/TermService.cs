@@ -58,6 +58,8 @@ namespace DataService.Entity.TermServices.V1
                 HasChapterValue = Term.HasChapter ? "دارد" : "ندارد",
                 StatusKey       = Term.Status == Model.Enums.Term.Status.Active ? 1 : 0,
                 StatusValue     = Term.Status == Model.Enums.Term.Status.Active ? "فعال" : "غیر فعال",
+                DateStart       = Term.DateStart,
+                DateEnd         = Term.DateEnd ?? "در حال برگزاری",
                 DateCreate      = Term.CreatedAt,
                 DateUpdate      = Term.UpdatedAt 
             }).ToPaginatedListAsync(count, page);
@@ -122,6 +124,8 @@ namespace DataService.Entity.TermServices.V1
                 HasChapterValue = TermTarget.HasChapter ? "دارد" : "ندارد",
                 StatusKey       = TermTarget.Status == Model.Enums.Term.Status.Active ? 1 : 0,
                 StatusValue     = TermTarget.Status == Model.Enums.Term.Status.Active ? "فعال" : "غیر فعال",
+                DateStart       = TermTarget.DateStart,
+                DateEnd         = TermTarget.DateEnd ?? "در حال برگزاری",
                 DateCreate      = TermTarget.CreatedAt,
                 DateUpdate      = TermTarget.UpdatedAt,
                 IsBuyed         = BuyTerm,
@@ -218,6 +222,8 @@ namespace DataService.Entity.TermServices.V1
                     HasChapterValue = TermTarget.HasChapter ? "دارد" : "ندارد",
                     StatusKey       = TermTarget.Status == Model.Enums.Term.Status.Active ? 1 : 0,
                     StatusValue     = TermTarget.Status == Model.Enums.Term.Status.Active ? "فعال" : "غیر فعال",
+                    DateStart       = TermTarget.DateStart,
+                    DateEnd         = TermTarget.DateEnd ?? "در حال برگزاری",
                     DateCreate      = TermTarget.CreatedAt,
                     DateUpdate      = TermTarget.UpdatedAt,
                     IsBuyed         = BuyTerm,
@@ -291,8 +297,10 @@ namespace DataService.Entity.TermServices.V1
                 HasChapterValue = Term.HasChapter ? "دارد" : "ندارد",
                 StatusKey       = Term.Status == Model.Enums.Term.Status.Active ? 1 : 0,
                 StatusValue     = Term.Status == Model.Enums.Term.Status.Active ? "فعال" : "غیر فعال",
+                DateStart       = Term.DateStart,
+                DateEnd         = Term.DateEnd ?? "در حال برگزاری",
                 DateCreate      = Term.CreatedAt,
-                DateUpdate      = Term.UpdatedAt 
+                DateUpdate      = Term.UpdatedAt
             }).ToPaginatedListAsync(count, page);
         }
 
@@ -309,6 +317,87 @@ namespace DataService.Entity.TermServices.V1
                 CountVideos   = Term.Videos.Count,
                 CountStudent  = Term.Buys.Count
             }).ToPaginatedListAsync(count, page);
+        }
+
+        public override async Task<List<TermsViewModel>> FindAllLastPublishWithNoTrackingAndActiveAsync(int count)
+        {
+            return await _Context.Terms.AsNoTracking().OrderByDescending(Term => Term.Id).Where(Term => Term.Status == Model.Enums.Term.Status.Active).Take(count).Select(Term => new TermsViewModel
+            {
+                Id            = Term.Id,
+                Image         = $"{ _Config.GetValue<string>("File:UploadPathImagePublic").Replace("\\", "/") }{ Term.Image.Path }",
+                CategoryName  = Term.Category.Name,
+                Name          = Term.Name,
+                Description   = Term.Description, 
+                Price         = Term.Price,
+                CountVideos   = Term.Videos.Count,
+                CountStudent  = Term.Buys.Count
+            }).ToListAsync();
+        }
+
+        public override async Task<List<TermsViewModel>> FindAllLastPublishWithNoTrackingAndActiveForCategoryAsync(string category, int count)
+        {
+            return await _Context.Terms.AsNoTracking().OrderByDescending(Term => Term.Id).Where(Term => Term.Status == Model.Enums.Term.Status.Active).Where(Term => Term.Category.Name.Equals(category)).Take(count).Select(Term => new TermsViewModel
+            {
+                Id            = Term.Id,
+                Image         = $"{ _Config.GetValue<string>("File:UploadPathImagePublic").Replace("\\", "/") }{ Term.Image.Path }",
+                CategoryName  = Term.Category.Name,
+                Name          = Term.Name,
+                Description   = Term.Description, 
+                Price         = Term.Price,
+                CountVideos   = Term.Videos.Count,
+                CountStudent  = Term.Buys.Count
+            }).ToListAsync();
+        }
+
+        public override async Task<List<TermsViewModel>> FindAllByTitleWithNoTrackingAndActiveAsync(string title)
+        {
+            return await _Context.Terms.AsNoTracking().OrderByDescending(Term => Term.Id).Where(Term => Term.Status == Model.Enums.Term.Status.Active).Where(Term => EF.Functions.Like(Term.Name, $"%{title}%")).Select(Term => new TermsViewModel
+            {
+                Id            = Term.Id,
+                Image         = $"{ _Config.GetValue<string>("File:UploadPathImagePublic").Replace("\\", "/") }{ Term.Image.Path }",
+                CategoryName  = Term.Category.Name,
+                Name          = Term.Name,
+                Description   = Term.Description, 
+                Price         = Term.Price,
+                CountVideos   = Term.Videos.Count,
+                CountStudent  = Term.Buys.Count
+            }).ToListAsync();
+        }
+
+        public override async Task<List<TermsViewModel>> FindAllByTitleForCategoryWithNoTrackingAndActiveAsync(string category, string title)
+        {
+            return await _Context.Terms
+                                 .AsNoTracking()
+                                 .OrderByDescending(Term => Term.Id)
+                                 .Where(Term => Term.Status == Model.Enums.Term.Status.Active)
+                                 .Where(Term => EF.Functions.Like(Term.Name, $"%{title}%"))
+                                 .Where(Term => Term.Category.Name.Equals(category))
+                                 .Select(Term => new TermsViewModel
+                                 {
+                                     Id            = Term.Id,
+                                     Image         = $"{ _Config.GetValue<string>("File:UploadPathImagePublic").Replace("\\", "/") }{ Term.Image.Path }",
+                                     CategoryName  = Term.Category.Name,
+                                     Name          = Term.Name,
+                                     Description   = Term.Description, 
+                                     Price         = Term.Price,
+                                     CountVideos   = Term.Videos.Count,
+                                     CountStudent  = Term.Buys.Count
+                                 }).ToListAsync();
+        }
+
+        public override async Task<List<TermsViewModel>> FindAllOwnedWithNoTrackingAsync(User user)
+        {
+            return await _Context.Buys.AsNoTracking().OrderByDescending(Buy => Buy.Id).Where(Buy => Buy.UserId.Equals(user.Id)).Select(Buy => new TermsViewModel
+            {
+                Id            = Buy.TermId,
+                Image         = $"{ _Config.GetValue<string>("File:UploadPathImagePublic").Replace("\\", "/") }{ Buy.Term.Image.Path }",
+                CategoryName  = Buy.Term.Category.Name,
+                Name          = Buy.Term.Name,
+                Description   = Buy.Term.Description, 
+                Price         = Buy.Term.Price,
+                CountVideos   = Buy.Term.Videos.Count,
+                CountStudent  = Buy.Term.Buys.Count
+            }).ToListAsync();
         }
     }
     

@@ -1,12 +1,15 @@
 {
   "version": 2,
-  "dgSpecHash": "a4k1TTvxNaPhZWAR5krWASrpXjchoHOqwItz/6weJH1yJ9jrhBzMKjoTNQBVjzFNhjJjD/jGdUCmU5N1YC2FCA==",
+  "dgSpecHash": "X0xdJSXUGuYzi8gBn6rtjlQPg7WO2wOlL2vMB+/MYD4xt883lhlob2kXH+5PCxV6FS1pQ+phOps8dH7i+N027A==",
   "success": true,
   "projectFilePath": "C:\\Users\\Programmer\\Desktop\\ASP Projects\\LMS\\DataAccess\\DataAccess.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\Programmer\\.nuget\\packages\\anglesharp\\0.14.0\\anglesharp.0.14.0.nupkg.sha512",
+    "C:\\Users\\Programmer\\.nuget\\packages\\anglesharp.css\\0.14.2\\anglesharp.css.0.14.2.nupkg.sha512",
     "C:\\Users\\Programmer\\.nuget\\packages\\hangfire.aspnetcore\\1.7.18\\hangfire.aspnetcore.1.7.18.nupkg.sha512",
     "C:\\Users\\Programmer\\.nuget\\packages\\hangfire.core\\1.7.18\\hangfire.core.1.7.18.nupkg.sha512",
     "C:\\Users\\Programmer\\.nuget\\packages\\hangfire.sqlserver\\1.7.18\\hangfire.sqlserver.1.7.18.nupkg.sha512",
+    "C:\\Users\\Programmer\\.nuget\\packages\\htmlsanitizer\\5.0.376\\htmlsanitizer.5.0.376.nupkg.sha512",
     "C:\\Users\\Programmer\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\Programmer\\.nuget\\packages\\kavenegar\\1.2.4\\kavenegar.1.2.4.nupkg.sha512",
     "C:\\Users\\Programmer\\.nuget\\packages\\libuv\\1.9.1\\libuv.1.9.1.nupkg.sha512",

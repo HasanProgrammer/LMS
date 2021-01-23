@@ -24,6 +24,8 @@ namespace DataAccess.ViewModels
         public string HasChapterValue { get; set; } /*برای نمایش فارسی دارد | ندارد*/
         public int StatusKey          { get; set; } /*برای نمایش مقدار 1 | 0*/
         public string StatusValue     { get; set; } /*برای نمایش فارسی فعال | غیر فعال*/
+        public string DateStart       { get; set; }
+        public string DateEnd         { get; set; }
         public string DateCreate      { get; set; }
         public string DateUpdate      { get; set; }
         

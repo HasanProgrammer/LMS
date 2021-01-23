@@ -76,7 +76,7 @@ namespace DataService.Entity.QuestionServices.V1
 
         public override Comment FindWithIdEntityWithEagerLoading(int? id)
         {
-            return _Context.Comments.Include(Comment => Comment.Term).SingleOrDefault(Comment => Comment.Id == id);
+            return _Context.Comments.Include(Comment => Comment.User).Include(Comment => Comment.Term).SingleOrDefault(Comment => Comment.Id == id);
         }
     }
 }
