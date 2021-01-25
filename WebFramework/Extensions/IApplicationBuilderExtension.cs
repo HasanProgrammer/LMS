@@ -9,7 +9,7 @@ namespace WebFramework.Extensions
 {
     public static class IApplicationBuilderExtension
     {
-        public static void UseExceptionHandler(this IApplicationBuilder builder, IConfiguration configuration)
+        public static void UseMyExceptionHandler(this IApplicationBuilder builder, IConfiguration configuration)
         {
             builder.UseMiddleware<ExceptionHandler>(configuration);
         }

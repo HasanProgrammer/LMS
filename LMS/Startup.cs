@@ -53,7 +53,7 @@ namespace LMS
             IRecurringJobManager manager
         )
         {
-            app.UseExceptionHandler(Configuration);
+            app.UseMyExceptionHandler(Configuration); /*For Test : OK*/
             
             /*-------------------------------------------------------*/
             
@@ -63,7 +63,7 @@ namespace LMS
             }
             else
             {
-                app.UseExceptionHandler();
+                app.UseExceptionHandler(config => config.UseMyExceptionHandler(Configuration)); /*For Publish : OK*/
                 app.UseHsts();
             }
             
