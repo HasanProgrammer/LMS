@@ -12,5 +12,19 @@
   &lt;Assembly Path="C:\Users\Programmer\.nuget\packages\zarinpal-sdk\0.0.8\ZarinPal.dll" /&gt;&#xD;
   &lt;Assembly Path="C:\Users\Programmer\.nuget\packages\zarinpal\3.0.1\lib\netcoreapp2.2\ZarinPal.dll" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=b34eb708_002Dacfd_002D4e48_002Db7c7_002D4b28967c2f6a/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="IfDontSendData_MustReturnStatusCode400" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::2ED374D0-95A9-469A-B9BA-39BF2BFFBF26::net5.0::XUnitTest.Actions.AuthController.LoginTests.IfDontSendData_MustReturnStatusCode400&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	</wpf:ResourceDictionary>

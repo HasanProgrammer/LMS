@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Text;
 using System.Text.RegularExpressions;
 using Ganss.XSS;
+using Newtonsoft.Json;
 
 namespace Common
 {
@@ -38,6 +41,11 @@ namespace Common
                 text = text.Replace(i.ToString(), persian[i]);
 
             return text;
+        }
+
+        public static StringContent GetStringContent(object obj)
+        {
+            return new StringContent(JsonConvert.SerializeObject(obj), Encoding.Default, "application/json");
         }
     }
 }
