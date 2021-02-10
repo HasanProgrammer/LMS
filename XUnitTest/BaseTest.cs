@@ -26,8 +26,8 @@ namespace XUnitTest
             _HttpClient = _Server.CreateClient();
             _HttpClient.BaseAddress = new Uri("http://localhost:5000");
         }
-        
-        public void Dispose()
+
+        public void Dispose() /*GC | Explicit Cleanup*/
         {
             _Server.Dispose();
             _HttpClient.Dispose();
