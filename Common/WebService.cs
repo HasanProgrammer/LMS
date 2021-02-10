@@ -52,8 +52,8 @@ namespace Common
         
         public string Status
         {
-            get => _Status;
-            set => _Status = value;
+            get         => _Status;
+            private set => _Status = value;
         }
 
         public void SetHeaders(Dictionary<string, string> headers)
@@ -113,6 +113,8 @@ namespace Common
             private readonly Uri            _Url;
             private readonly HttpMethod     _Method;
             private readonly CoreHttpClient _HttpClient;
+            
+            /*-------------------------------------------------------*/
 
             public HttpClient(string url, string method)
             {
@@ -146,8 +148,7 @@ namespace Common
             /*Url Encoded | FormData*/
             public async Task<HttpResponseMessage> SendRequestByUrlEncodedAsync(Dictionary<string, string> data, HttpClientHeaders headers = null)
             {
-                HttpRequestMessage request = new HttpRequestMessage(_Method, _Url)
-                {
+                HttpRequestMessage request = new HttpRequestMessage(_Method, _Url) {
                     Content = new FormUrlEncodedContent(data)
                 };
 
@@ -169,8 +170,7 @@ namespace Common
 
                 content.Add(new FormUrlEncodedContent(data));
                 
-                HttpRequestMessage request = new HttpRequestMessage(_Method, _Url)
-                {
+                HttpRequestMessage request = new HttpRequestMessage(_Method, _Url) {
                     Content = content
                 };
 
@@ -189,8 +189,7 @@ namespace Common
                 content.Add(new ByteArrayContent(bytes), fileNameKey, file.FileName);
                 content.Add(new FormUrlEncodedContent(data));
 
-                HttpRequestMessage request = new HttpRequestMessage(_Method, _Url)
-                {
+                HttpRequestMessage request = new HttpRequestMessage(_Method, _Url) {
                     Content = content
                 };
 
@@ -202,8 +201,7 @@ namespace Common
             /*JSON*/
             public async Task<HttpResponseMessage> SendRequestByJsonAsync(object data, HttpClientHeaders headers = null)
             {
-                HttpRequestMessage request = new HttpRequestMessage(_Method, _Url)
-                {
+                HttpRequestMessage request = new HttpRequestMessage(_Method, _Url) {
                     Content = String.GetStringContent(data)
                 };
 
